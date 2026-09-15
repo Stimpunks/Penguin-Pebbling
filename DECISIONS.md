@@ -32,7 +32,17 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 ### 4. The domain is not registered yet
 
-Everything points at `https://penguinpebbling.app/` — the canonical link, the sitemap, `robots.txt`, the Open Graph URLs, the JSON-LD. If the address ends up different, those five files need the new one.
+`penguinpebbling.app` is NXDOMAIN, so the site currently lives at `https://penguin-pebbling.netlify.app/` and every self-reference points there — that is its real address until the domain exists.
+
+**It briefly pointed at the unregistered domain, and that was a live bug rather than a cosmetic one.** A `rel="canonical"` aimed at a domain that does not resolve tells a search engine the real page is somewhere it cannot fetch, which is a good way to be dropped from the index entirely. The same commit had `og:image` pointing at `cards/penguin-pebbling-locution.png`, a path that 404s: `cards/` holds only the WebP derivatives and the PNGs live in `cards/print/`. Neither showed up in local testing, because neither is something a browser complains about.
+
+So: **`tools/set-domain.py` now owns the address.** It rewrites all seven references across `index.html`, `robots.txt` and `sitemap.xml` in one go, `--check` reports whether they agree and whether the host resolves, and **it refuses to point the site at a domain that does not resolve yet.** When `penguinpebbling.app` is registered and DNS has propagated:
+
+```bash
+python3 tools/set-domain.py https://penguinpebbling.app
+```
+
+Then set the custom domain in Netlify and redeploy. Netlify will 301 the `.netlify.app` address to it, so anything indexed in the meantime follows.
 
 ----
 

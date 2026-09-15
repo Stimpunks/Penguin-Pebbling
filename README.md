@@ -31,9 +31,14 @@ penguin-pebbling.js     the thirty cards and the game logic
 cards/                  35 WebP images the page shows (1280px, ~50 KB each)
 cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
+og-image.png            1200x630 share card, for links unfurled on social
 tools/make-images.py    regenerates cards/ from cards/print/
-_headers _redirects     Netlify configuration
+tools/make-og-image.py  regenerates og-image.png
+tools/set-domain.py     rewrites the site's own address everywhere at once
+netlify.toml _headers _redirects   Netlify configuration
 ```
+
+**The site lives at <https://penguin-pebbling.netlify.app/> until `penguinpebbling.app` is registered.** Every self-reference points there, and `tools/set-domain.py` moves them all in one command — it refuses to point at a host that does not resolve, which is the mistake it was written after.
 
 ## Nothing loads from autisticrealms.com
 
