@@ -15,9 +15,11 @@ single worst one to point at a domain that does not resolve.
 nothing. Run it after the domain is registered and DNS resolves — not before.
 """
 import argparse
+import json
 import re
 import socket
 import sys
+import urllib.request
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -31,6 +33,60 @@ KNOWN = [
     "https://penguin-pebbling.netlify.app",
 ]
 ORIGIN_RX = re.compile("|".join(re.escape(o) for o in KNOWN))
+
+
+def resolves(host, attempts=4):
+    """Does this host exist? Returns (ok, how).
+
+    **A positive answer is proof; a negative one is only weak evidence.** That
+    asymmetry is the whole design. A resolver cannot invent an A record, so one
+    yes settles it. A no can simply be a cached denial that has not expired —
+    and on a freshly registered domain that is the normal case, not an edge one.
+
+    Two things make the stale denial long-lived here. This machine caches the
+    NXDOMAIN it got while the domain did not exist, for as long as the SOA
+    minimum says (an hour for penguinpebbling.app). And `.app` is DNSSEC-signed,
+    so the denial is *authenticated* and public resolvers cache it confidently —
+    observed live on this domain, with consecutive queries to Cloudflare
+    returning Status 3 and Status 0 seconds apart as different edge nodes
+    expired it at different times.
+
+    So: ask the local resolver, then Cloudflare, then Google, and keep asking
+    until something says yes. Conclude "no" only when every attempt said no.
+    Network failure is reported as unknown rather than absence.
+    """
+    try:
+        socket.gethostbyname(host)
+        return True, "local resolver"
+    except socket.gaierror:
+        pass
+
+    providers = [
+        ("1.1.1.1", "https://cloudflare-dns.com/dns-query"),
+        ("8.8.8.8", "https://dns.google/resolve"),
+    ]
+    reached = False
+    for attempt in range(attempts):
+        for name, endpoint in providers:
+            req = urllib.request.Request(
+                f"{endpoint}?name={host}&type=A",
+                headers={"Accept": "application/dns-json"},
+            )
+            try:
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    data = json.load(r)
+            except Exception:
+                continue
+            reached = True
+            if any(a.get("type") == 1 for a in data.get("Answer", [])):
+                note = f"{name}, attempt {attempt + 1}"
+                if attempt:
+                    note += " (earlier attempts hit a cached denial)"
+                return True, f"{note}; this machine's resolver still has a stale negative cache"
+
+    if not reached:
+        return None, "local resolver says no; could not reach any public resolver to confirm"
+    return False, f"local resolver and {len(providers)} public resolvers all say no, over {attempts} attempts"
 
 
 def current():
@@ -54,15 +110,17 @@ def check() -> int:
         return 2
     origin = next(iter(found))
     host = urlparse(origin).hostname
-    try:
-        socket.gethostbyname(host)
-        print(f"\n{host} resolves. Consistent.")
+    ok, how = resolves(host)
+    if ok:
+        print(f"\n{host} resolves — via {how}. Consistent.")
         return 0
-    except socket.gaierror:
-        print(f"\n{host} DOES NOT RESOLVE.")
-        print("A canonical link pointing at a dead domain tells search engines to")
-        print("index a URL that does not exist, which can drop the page entirely.")
+    if ok is None:
+        print(f"\n{host}: UNKNOWN — {how}")
         return 2
+    print(f"\n{host} DOES NOT RESOLVE ({how}).")
+    print("A canonical link pointing at a dead domain tells search engines to")
+    print("index a URL that does not exist, which can drop the page entirely.")
+    return 2
 
 
 def apply(new: str) -> int:
@@ -71,13 +129,17 @@ def apply(new: str) -> int:
         print(f"Add {new} to KNOWN in this script first, so a later run can find it.")
         return 2
     host = urlparse(new).hostname
-    try:
-        socket.gethostbyname(host)
-    except socket.gaierror:
-        print(f"Refusing: {host} does not resolve yet. Register the domain and let")
-        print("DNS propagate first — pointing the canonical at it early is the bug")
-        print("this script exists to prevent.")
+    ok, how = resolves(host)
+    if ok is None:
+        print(f"Refusing: cannot confirm {host} exists — {how}")
+        print("Re-run when the network is available.")
         return 2
+    if not ok:
+        print(f"Refusing: {host} does not resolve ({how}). Register the domain and")
+        print("let DNS propagate first — pointing the canonical at it early is the")
+        print("bug this script exists to prevent.")
+        return 2
+    print(f"{host} resolves — via {how}.")
 
     changed = 0
     for name in FILES:

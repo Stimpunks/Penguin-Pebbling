@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://penguin-pebbling.netlify.app/sitemap.xml
+Sitemap: https://penguinpebbling.app/sitemap.xml

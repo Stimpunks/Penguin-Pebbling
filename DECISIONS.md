@@ -30,23 +30,21 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 **CC BY-NC-SA 4.0 says exactly this and is written down.** Adopting it would cost nothing and would answer the question a school or clinic's legal team asks. But it is a licensing decision about Helen's artwork as much as the code, so it is hers and Ryan's jointly, not something to slip in during an import. Left exactly as the game states it.
 
-### 4. The domain is not registered yet
-
-`penguinpebbling.app` is NXDOMAIN, so the site currently lives at `https://penguin-pebbling.netlify.app/` and every self-reference points there — that is its real address until the domain exists.
-
-**It briefly pointed at the unregistered domain, and that was a live bug rather than a cosmetic one.** A `rel="canonical"` aimed at a domain that does not resolve tells a search engine the real page is somewhere it cannot fetch, which is a good way to be dropped from the index entirely. The same commit had `og:image` pointing at `cards/penguin-pebbling-locution.png`, a path that 404s: `cards/` holds only the WebP derivatives and the PNGs live in `cards/print/`. Neither showed up in local testing, because neither is something a browser complains about.
-
-So: **`tools/set-domain.py` now owns the address.** It rewrites all seven references across `index.html`, `robots.txt` and `sitemap.xml` in one go, `--check` reports whether they agree and whether the host resolves, and **it refuses to point the site at a domain that does not resolve yet.** When `penguinpebbling.app` is registered and DNS has propagated:
-
-```bash
-python3 tools/set-domain.py https://penguinpebbling.app
-```
-
-Then set the custom domain in Netlify and redeploy. Netlify will 301 the `.netlify.app` address to it, so anything indexed in the meantime follows.
-
 ----
 
 ## Settled during the import
+
+### The domain, and why a name lookup is not a good enough guard
+
+`penguinpebbling.app` went live on 2026-09-14 and the site moved to it. All seven self-references — the canonical link, `og:url`, `og:image`, the JSON-LD `url` and `license`, the `Sitemap` line in `robots.txt`, and the `<loc>` in `sitemap.xml` — are set by `tools/set-domain.py`, which refuses to point at a host it cannot confirm exists.
+
+**Confirming that turned out to be the interesting part.** The first version asked `socket.gethostbyname` and believed the answer. It refused the switch on a domain that was already live and serving with a valid certificate, because this machine had cached the NXDOMAIN from before the domain was registered — for the SOA minimum, which is an hour here.
+
+Falling back to a public resolver was not enough either. `.app` is DNSSEC-signed, so the pre-registration denial is *authenticated*, and public resolvers cache it with confidence: consecutive queries to Cloudflare returned `Status: 3` and `Status: 0` seconds apart, as different edge nodes expired it at different times.
+
+So the guard now encodes the asymmetry that actually holds: **a positive DNS answer is proof, a negative one is only weak evidence.** A resolver cannot invent an A record, so one yes settles it; a no might just be a denial that has not expired. It asks the local resolver, then Cloudflare, then Google, retries, and concludes "no" only when everything says no. Network failure is reported as unknown rather than as absence.
+
+The `.netlify.app` address still works and Netlify 301s it to the domain, so anything indexed during the gap follows.
 
 ### Assets are local; links to Autistic Realms are not "dependencies"
 

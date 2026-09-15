@@ -38,7 +38,7 @@ tools/set-domain.py     rewrites the site's own address everywhere at once
 netlify.toml _headers _redirects   Netlify configuration
 ```
 
-**The site lives at <https://penguin-pebbling.netlify.app/> until `penguinpebbling.app` is registered.** Every self-reference points there, and `tools/set-domain.py` moves them all in one command — it refuses to point at a host that does not resolve, which is the mistake it was written after.
+**The site lives at <https://penguinpebbling.app/>.** Every self-reference is set by `tools/set-domain.py`, which moves all seven at once and refuses to point at a host it cannot confirm exists — see `DECISIONS.md` for why confirming that is harder than a name lookup.
 
 ## Nothing loads from autisticrealms.com
 
