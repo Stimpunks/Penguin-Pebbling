@@ -122,9 +122,81 @@ body {
 
 .wrap { padding: 1.5rem; max-width: 42rem; margin: 0 auto; }
 
+/* ── Site nav ──────────────────────────────────────────────────────────────────
+ * The game is the point of the site, so it sits at the top of index.html and
+ * everything that explains it lives on its own page. This is the way back.
+ *
+ * A <details> rather than a scripted menu: it opens with the keyboard, it is
+ * announced as expandable, and it works with JavaScript off — which matters
+ * because the nav is how you reach the printable deck and the Easy Read guide,
+ * and those are exactly what someone without a working game needs. */
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.topbar-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding-top: 0.6rem; padding-bottom: 0.6rem;
+}
+
+.sitenav { position: relative; }
+.sitenav summary {
+  cursor: pointer; list-style: none;
+  font-size: var(--text-base); font-weight: 700; color: var(--ink);
+  padding: 8px 14px; border: 1px solid var(--line-strong);
+  border-radius: 22px; background: var(--paper-warm);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.sitenav summary::-webkit-details-marker { display: none; }
+.sitenav summary::after { content: "\25BE"; color: var(--ink-soft); font-size: 0.8em; }
+.sitenav[open] summary::after { content: "\25B4"; }
+.sitenav summary:hover { background: #ece5db; }
+
+.sitenav > ul {
+  list-style: none; margin: 8px 0 0; padding: 8px;
+  position: absolute; z-index: 30; left: 0; min-width: 16rem;
+  background: var(--paper); border: 1px solid var(--line-strong);
+  border-radius: 12px; box-shadow: 0 8px 26px rgba(61, 53, 41, 0.16);
+}
+.sitenav > ul li { margin: 2px 0; }
+.sitenav > ul a {
+  display: block; padding: 9px 12px; border-radius: 8px;
+  color: var(--ink); text-decoration: none; font-size: var(--text-base);
+}
+.sitenav > ul a:hover { background: var(--paper-sunk); }
+.sitenav a[aria-current="page"] { font-weight: 700; background: var(--paper-warm); }
+
+.topbar-cta {
+  font-size: var(--text-sm); font-weight: 700; white-space: nowrap;
+  padding: 8px 16px; border-radius: 22px;
+  border: 1px solid var(--line-strong); background: #e8e0d5;
+  color: var(--ink); text-decoration: none;
+}
+.topbar-cta:hover { background: #ddd4c5; }
+
+/* ── "More about the game", at the foot of the game page ─────────────────────── */
+
+.more { margin: 2.2rem 0 0; }
+.more ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.more a {
+  display: block; padding: 1rem 1.15rem;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--paper-warm); color: var(--ink); text-decoration: none;
+}
+.more a:hover { background: var(--paper-sunk); }
+.more a strong { display: block; font-size: var(--text-base); font-weight: 700; margin-bottom: 2px; }
+.more a span { display: block; font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.5; }
+
 /* ── Page furniture ────────────────────────────────────────────────────────── */
 
 .masthead { padding: 2.5rem 0 0.5rem; }
+.masthead-sub { padding: 1.75rem 0 0.5rem; }
+.backlink { font-size: var(--text-sm); margin-bottom: 0.5rem; }
+.backlink a { color: var(--accent); text-decoration: none; }
+.backlink a:hover { text-decoration: underline; }
+.backlink a::before { content: "\2190\00a0"; }
 .masthead h1 {
   font-size: var(--text-2xl);
   line-height: 1.2;
@@ -168,6 +240,7 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 /* ── Game ──────────────────────────────────────────────────────────────────── */
 
 .game-header {
+  margin-top: 1.25rem;
   display: flex; align-items: flex-start; gap: 16px;
   margin-bottom: 1.4rem; padding: 1.25rem;
   background: var(--paper-warm); border-radius: 12px; border: 1px solid var(--line);
@@ -176,16 +249,25 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 /* The game's <h2> sits inside .prose, so it would otherwise inherit the heading
  * margin meant for article headings. Stated here rather than as a style
  * attribute — the CSP is style-src 'self' and an inline style is blocked. */
+/* On index.html this is the page's <h1>: the game header already carried the
+ * title, the tagline and the invitation, so a masthead above it only said the
+ * same things again and pushed the game down the screen. */
 .game-header .game-title {
-  font-size: var(--text-xl); font-weight: 700; color: var(--ink-strong); margin: 0 0 4px;
-  line-height: 1.25;
+  font-size: var(--text-2xl); font-weight: 700; color: var(--ink-strong); margin: 0 0 4px;
+  line-height: 1.2;
 }
-.game-tagline { font-size: var(--text-sm); color: var(--ink-soft); font-style: italic; margin-bottom: 8px; }
+.game-tagline { font-size: var(--text-base); color: var(--ink-soft); font-style: italic; margin-bottom: 10px; }
 .game-intro { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.65; }
+.game-byline { font-size: var(--text-xs); color: var(--ink-faint); margin-top: 10px; }
+.game-byline a { color: var(--ink-faint); }
 
+/* On index.html this sits AFTER the controls. It is collapsed reference material
+ * on a page whose whole job is "press Draw", and in front of the button it was
+ * pushing the only action below the fold on a phone. The full instructions have
+ * their own page in the menu; this is the copy you want mid-game. */
 .rules-block {
   border: 1px solid var(--line); border-radius: 12px;
-  padding: 1rem 1.25rem; margin-bottom: 1.4rem; background: var(--paper);
+  padding: 1rem 1.25rem; margin: 0 0 1.4rem; background: var(--paper);
 }
 .rules-block details summary {
   font-size: var(--text-base); font-weight: 600; cursor: pointer; color: var(--ink);
@@ -219,7 +301,7 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 
 .card-area {
   border-radius: 12px; overflow: hidden; margin-bottom: 1rem;
-  border: 1px solid var(--line); min-height: 200px;
+  border: 1px solid var(--line); min-height: 128px;
   display: flex; flex-direction: column; background: var(--paper);
 }
 .card-image-wrap { position: relative; width: 100%; }
@@ -243,10 +325,14 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   padding: 10px 1.5rem; background: var(--paper-warm);
   border-top: 1px solid var(--line); line-height: 1.5; margin-top: 1.1rem;
 }
+/* Kept short on purpose. This box is empty until someone presses Draw, and every
+ * pixel it occupies pushes that button further from the top of the screen —
+ * which was the whole complaint that split this site into pages. It grows to fit
+ * the card the moment there is one. */
 .card-empty {
   color: var(--ink-faint); font-size: var(--text-base); text-align: center; flex: 1;
   display: flex; align-items: center; justify-content: center;
-  padding: 2rem; background: var(--paper);
+  padding: 1.35rem; background: var(--paper);
 }
 
 .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 1.5rem; }
@@ -340,9 +426,10 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 .support a { color: #5a4a30; }
 
 .sitefoot {
-  border-top: 1px solid var(--line); margin-top: 2.5rem; padding: 1.6rem 0 3rem;
+  border-top: 1px solid var(--line); margin-top: 2.5rem;
   font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7;
 }
+.sitefoot .wrap { padding-top: 1.6rem; padding-bottom: 3rem; }
 .sitefoot a { color: var(--accent); }
 .sitefoot p + p { margin-top: 0.7rem; }
 
@@ -357,6 +444,26 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   .pebble-row { margin-left: 0; justify-content: flex-start; width: 100%; }
   .pebble-bank { justify-content: flex-start; }
   .card-text { padding: 1.15rem 1.15rem 0.25rem; }
+  .topbar-inner { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+  .sitenav > ul { min-width: min(18rem, calc(100vw - 2rem)); }
+
+  /* On a phone the game header was filling the whole viewport on its own, which
+   * put "Draw a card" a screen and a half down — the same complaint that split
+   * this site into pages, just at a narrower width. The title stays the largest
+   * thing on the page; the supporting lines give back their leading. */
+  .game-header { gap: 12px; padding: 1rem; margin-top: 0.9rem; }
+  .penguin-glyph { font-size: 2rem; }
+  .game-header .game-title { font-size: 1.6rem; }
+  .game-tagline { font-size: var(--text-sm); line-height: 1.45; margin-bottom: 8px; }
+  .game-intro { line-height: 1.55; }
+  .game-byline { margin-top: 8px; line-height: 1.5; }
+  .rules-block { padding: 0.85rem 1rem; margin-bottom: 1rem; }
+  .game-header { margin-bottom: 1rem; }
+  .card-area { min-height: 96px; }
+  .card-empty { padding: 1rem; }
+  .controls { gap: 8px; margin-bottom: 1.2rem; }
+  .filter-row { gap: 6px; }
+  .fbtn { padding: 6px 12px; }
   .card-footer { padding-left: 1.15rem; padding-right: 1.15rem; }
 }
 

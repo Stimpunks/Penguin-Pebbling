@@ -25,7 +25,11 @@ pulled local.
 and a folder of pictures. Open `index.html` and it works; push the folder and it deploys.
 
 ```
-index.html              the whole page — article, game, downloads, references
+index.html              the game, and almost nothing else
+how-to-play.html        what it is, what you need, taking turns, ending a game
+locutions.html          the five locution cards and a quick guide
+print.html              the printable deck, Plain Language and Easy Read guides
+about.html              sources, practitioners, licence, references
 penguin-pebbling.css    Helen's palette and type, extended to cover the page
 penguin-pebbling.js     the thirty cards and the game logic
 cards/                  35 WebP images the page shows (1280px, ~50 KB each)
@@ -35,6 +39,7 @@ og-image.png            1200x630 share card, for links unfurled on social
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
+tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/check-contrast.py checks every colour pair against WCAG AA
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
 netlify.toml _headers _redirects   Netlify configuration
@@ -70,6 +75,32 @@ python3 tools/make-images.py
 
 It rewrites only what changed and prints the size saved. Needs Pillow (`python3 -m pip install
 --upgrade Pillow`) and nothing else.
+
+## The game is the front page
+
+Everything that explains the game lives on its own page, reachable from the **Menu** in the bar
+at the top. `index.html` is the game and a short list of links, and nothing else.
+
+It was one long page for a day, and the game sat below roughly a thousand words of introduction
+and instructions — you had to scroll past the explanation to reach the thing being explained.
+This follows what [cavendish.app](https://cavendish.app/) already does: a `<details>` menu in a
+sticky bar, `aria-current="page"` on the link you are on, and a **Play the game** button on every
+page that is not the game.
+
+A `<details>` rather than a scripted menu, deliberately: it opens with the keyboard, is announced
+as expandable, and works with JavaScript off — which matters, because the menu is how you reach
+the printable deck and the Easy Read guide, and those are exactly what someone without a working
+game needs.
+
+**The nav and footer live in `index.html` and are stamped into the other pages** by
+`tools/sync-shell.py`. Five hand-maintained copies of one menu is a drift problem with a quiet
+failure mode — a link added in one place, a page that still claims to be current after a rename.
+Edit the nav in `index.html`, then:
+
+```bash
+python3 tools/sync-shell.py          # stamp it into the rest
+python3 tools/sync-shell.py --check  # report drift, write nothing
+```
 
 ## Typography
 

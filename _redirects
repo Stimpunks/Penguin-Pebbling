@@ -1,5 +1,11 @@
-# The game lived at Autistic Realms first, and the old deep links should land
-# somewhere sensible if anyone ever points them here.
+# The game lived at Autistic Realms first, and inside one long page here for a
+# day before it was split. Both sets of old addresses land somewhere sensible.
 /penguin-pebbling-a-game-of-creating-belonging-building-connection-and-understanding-autistic-identity  /  301
-/game                                                                                                  /#game  301
-/print                                                                                                 /#downloads  301
+
+# Single-page-era anchors. These were real URLs people could have copied.
+/print                  /print.html        301
+/downloads              /print.html        301
+/game                   /                  301
+/how-to-play            /how-to-play.html  301
+/locutions              /locutions.html    301
+/about                  /about.html        301

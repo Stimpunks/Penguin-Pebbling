@@ -34,6 +34,37 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 ## Settled during the import
 
+### The game moved to the front, and the prose moved to its own pages
+
+Ryan's call, 2026-09-14, pointing at [cavendish.app](https://cavendish.app/), which had already
+solved this: *"The game itself is way down the page."*
+
+It was. The single page opened with roughly a thousand words — what Penguin Pebbling is, then the
+full How to Play — before reaching the thing all of it describes. On a phone the game was most of
+a screen-and-a-half down. That ordering is inherited from the original: it was an *article* at
+Autistic Realms with a game embedded in it, and the article's shape survived the import unexamined.
+
+Now `index.html` is the game and a short list of links. `how-to-play.html`, `locutions.html`,
+`print.html` and `about.html` take the rest, reachable from a `<details>` menu in a sticky bar —
+the Cavendish pattern, including `aria-current="page"` and a **Play the game** button on every
+other page. **No content was cut**: every word is still on the site, on the page it belongs to.
+
+Three things followed from the move rather than being decided separately:
+
+- **The masthead was merged into the game header.** They both said "Penguin Pebbling" and both
+  carried the same tagline, one directly above the other. The game header is the `<h1>` now.
+- **The collapsed "How to play" panel moved below the controls** on the game page. It is
+  reference material on a page whose only job is "press Draw", and in front of the button it was
+  pushing the single action off a phone screen. The full instructions have their own page; this
+  is the copy you want mid-game.
+- **Sentences that pointed at the old layout were rewritten.** *"use the game below"* and
+  *"print and cut the card set further down this page"* were true of one long page and false of
+  five. They are links now. This is the failure mode of splitting a page: the prose goes on
+  describing the shape it used to have, and nothing errors.
+
+`tools/sync-shell.py` owns the nav and footer so five copies cannot drift apart, and
+`tools/set-domain.py` grew from three files to seven.
+
 ### Atkinson Hyperlegible Next, at sizes chosen for this page
 
 Ryan's call, 2026-09-14. The widget was typed in the system UI font at 11–15px, which is what an

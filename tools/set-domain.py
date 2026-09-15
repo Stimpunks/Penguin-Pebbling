@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Point the site at an origin, everywhere at once.
 
-The site's own address is written into six places across three files: the
-canonical link, og:url, og:image, the JSON-LD `url` and `license`, the Sitemap
-line in robots.txt, and the <loc> in sitemap.xml. There is no build step to
+The site's own address is written into every page's canonical link, og:url and
+og:image, plus the JSON-LD `url` and `license` on index.html, the Sitemap line in
+robots.txt, and one <loc> per page in sitemap.xml. That is dozens of places
+across seven files, and it grows every time a page is added. There is no build step to
 derive them from one constant, so without this they get changed by hand and one
 gets missed — and the one that gets missed is usually the canonical, which is the
 single worst one to point at a domain that does not resolve.
@@ -24,7 +25,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
-FILES = ["index.html", "robots.txt", "sitemap.xml"]
+FILES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
+         "about.html", "robots.txt", "sitemap.xml"]
 
 # Every origin this site has ever been addressed by. A new one is added here the
 # first time it is used, so the rewrite can always find what it is replacing.
