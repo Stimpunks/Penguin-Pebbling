@@ -30,6 +30,7 @@ how-to-play.html        what it is, what you need, taking turns, ending a game
 locutions.html          the five locution cards and a quick guide
 print.html              the printable deck, Plain Language and Easy Read guides
 about.html              sources, practitioners, licence, references
+changelog.html          generated from CHANGELOG.md — never edit it directly
 penguin-pebbling.css    Helen's palette and type, extended to cover the page
 penguin-pebbling.js     the thirty cards and the game logic
 cards/                  35 WebP images the page shows (1280px, ~50 KB each)
@@ -40,6 +41,7 @@ tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
+tools/build-changelog.py renders CHANGELOG.md into changelog.html
 tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
 theme.js                light/dark, set before first paint and remembered
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
@@ -102,6 +104,27 @@ Edit the nav in `index.html`, then:
 python3 tools/sync-shell.py          # stamp it into the rest
 python3 tools/sync-shell.py --check  # report drift, write nothing
 ```
+
+## The changelog
+
+`CHANGELOG.md` is the source; the published page at
+[penguinpebbling.app/changelog](https://penguinpebbling.app/changelog) is generated from it.
+**Never edit `changelog.html` by hand** — the next build overwrites it.
+
+```bash
+python3 tools/build-changelog.py          # rebuild the page
+python3 tools/build-changelog.py --check  # report drift, write nothing
+```
+
+Entries are dated by the day a change went live, newest first, split into **Game** (the cards,
+the prompts, how a card is shown) and **Site**. There are no version numbers, because the site
+deploys continuously.
+
+The renderer understands a deliberately small dialect — `##`/`###`, `-` bullets, paragraphs, and
+inline bold, italic, code and links — and **anything else is a hard error rather than a silent
+drop.** A renderer that quietly swallows a line it does not recognise is the worst kind for a
+document whose whole job is being a complete record: the page would look fine and the entry
+would be gone.
 
 ## Colour
 

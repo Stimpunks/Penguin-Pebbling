@@ -25,7 +25,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = "index.html"
-PAGES = ["index.html", "how-to-play.html", "locutions.html", "print.html", "about.html"]
+PAGES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
+         "about.html", "changelog.html"]
 BLOCKS = ["nav", "footer"]
 
 CTA = '\n      <a class="topbar-cta" href="index.html">Play the game</a>'

@@ -26,7 +26,7 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 FILES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
-         "about.html", "robots.txt", "sitemap.xml"]
+         "about.html", "changelog.html", "robots.txt", "sitemap.xml"]
 
 # Every origin this site has ever been addressed by. A new one is added here the
 # first time it is used, so the rewrite can always find what it is replacing.
