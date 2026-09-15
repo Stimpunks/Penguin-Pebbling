@@ -46,10 +46,20 @@
   # local.
   # `img-src` allows data: because nothing uses it today and it costs nothing to
   # keep an inline SVG working if one is ever added.
+  # Two directives exist here only because of the service worker, and both are
+  # `'self'` — our own script, our own origin, nothing else loosened.
+  #
   # `worker-src` falls back through `child-src` to `default-src`, so
-  # `default-src 'none'` blocks the service worker — our own script, from our own
-  # origin. It is named explicitly rather than loosened anywhere else.
-  Content-Security-Policy: default-src 'none'; script-src 'self'; worker-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  # `default-src 'none'` refused to register the worker at all.
+  #
+  # `connect-src` falls back straight to `default-src`, and it governs `fetch()`
+  # — including the fetches a service worker makes inside `cache.add()`. Without
+  # it the worker registers, activates, controls the page, and caches precisely
+  # nothing: every precache entry fails and offline silently does not exist. It
+  # shipped that way for one deploy. The local preview sends no CSP at all, so
+  # there is nothing to catch this before production — the only check is the live
+  # site, which is why the verification is in the commit rather than assumed.
+  Content-Security-Policy: default-src 'none'; script-src 'self'; worker-src 'self'; connect-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 # Card art changes only when Helen redraws a card, but the filenames are stable
 # — `infodumping-1.webp` says nothing about its contents the way a content hash
