@@ -1,9 +1,18 @@
 #!/usr/bin/env python3
-"""Check text/background contrast against WCAG 2.1 AA.
+"""Check text/background contrast against WCAG 2.1 AA, in BOTH themes.
 
 A typeface chosen for legibility and a body size chosen for legibility are both
-undone by grey-on-cream that the reader cannot resolve. This measures the pairs
-the page actually uses rather than trusting that they look fine on this monitor.
+undone by colours the reader cannot resolve. This measures the pairs the page
+actually uses rather than trusting that they look fine on this monitor.
+
+**It checks light and dark.** A dark mode that fails AA is the ordinary way this
+goes wrong: the light palette gets designed carefully and the dark one gets
+eyeballed at night, when everything looks fine because your pupils are wide.
+
+The palette is deliberately low-stimulation, which is about SURFACES — paper,
+panel and sunk sit within a few percent of each other, and there is no pure white
+or pure black anywhere. It is not about text. Text contrast stays high, and this
+is what says so.
 
 AA is 4.5:1 for normal text and 3:1 for large text (>= 24px, or >= 18.66px bold).
 Run:  python3 tools/check-contrast.py
@@ -34,45 +43,90 @@ def ratio(fg, bg):
     return (hi + 0.05) / (lo + 0.05)
 
 
-def tokens():
+def tokens_in(block):
+    return dict(re.findall(r"(--[\w-]+):\s*(#[0-9a-fA-F]{3,8})\s*;", block))
+
+
+def themes():
     text = CSS.read_text(encoding="utf-8")
-    block = text[text.index(":root {"):text.index("}", text.index(":root {"))]
-    return dict(re.findall(r"(--[\w-]+):\s*(#[0-9a-fA-F]{3,6})\s*;", block))
+
+    light_start = text.index(":root {")
+    light = tokens_in(text[light_start:text.index("\n}", light_start)])
+
+    # The toggle's block is the authority for dark; the prefers-color-scheme block
+    # must agree with it, and that is checked below rather than assumed.
+    dark_start = text.index(':root[data-theme="dark"] {')
+    dark = tokens_in(text[dark_start:text.index("\n}", dark_start)])
+
+    media_start = text.index(':root:not([data-theme="light"]) {')
+    media = tokens_in(text[media_start:text.index("\n  }", media_start)])
+
+    return light, dark, media
 
 
-# (label, foreground, background, is_large_text)
+LOCS = ["id", "pp", "ss", "pb", "dp"]
+
+
 def pairs(t):
     P, W, S = t["--paper"], t["--paper-warm"], t["--paper-sunk"]
-    return [
+    out = [
         ("body text on paper",        t["--ink"],        P, False),
         ("headings on paper",         t["--ink-strong"], P, True),
+        ("body on panel",             t["--ink"],        W, False),
+        ("body on sunk",              t["--ink"],        S, False),
         ("secondary prose on paper",  t["--ink-soft"],   P, False),
-        ("secondary on warm paper",   t["--ink-soft"],   W, False),
+        ("secondary on panel",        t["--ink-soft"],   W, False),
         ("faint labels on paper",     t["--ink-faint"],  P, False),
-        ("faint labels on warm",      t["--ink-faint"],  W, False),
+        ("faint labels on panel",     t["--ink-faint"],  W, False),
+        ("faint labels on sunk",      t["--ink-faint"],  S, False),
         ("links on paper",            t["--accent"],     P, False),
-        ("button text on #e8e0d5",    t["--ink"],        "#e8e0d5", False),
-        ("take-pebble on warm",       t["--focus"],      W, False),
+        ("links on panel",            t["--accent"],     W, False),
+        ("button text on btn face",   t["--ink"],        t["--btn-face"], False),
+        ("button text on btn hover",  t["--ink"],        t["--btn-face-hover"], False),
         ("card locution on paper",    t["--focus"],      P, False),
-        ("body on sunk hover",        t["--ink"],        S, False),
     ]
+    for k in LOCS:
+        bg = t[f"--loc-{k}-bg"]
+        out.append((f"locution {k}: name",  t[f"--loc-{k}-name"], bg, False))
+        out.append((f"locution {k}: body",  t["--ink-soft"],      bg, False))
+    return out
 
 
-def main():
-    t = tokens()
+def check(name, t):
+    print(f"\n── {name} " + "─" * (56 - len(name)))
     bad = 0
-    print(f"{'pair':32} {'ratio':>7}  need   verdict")
     for label, fg, bg, large in pairs(t):
         r = ratio(fg, bg)
         need = 3.0 if large else 4.5
         ok = r >= need
         bad += not ok
-        print(f"{label:32} {r:6.2f}:1  {need:>4}   {'PASS' if ok else 'FAIL'}")
+        print(f"  {label:28} {r:6.2f}:1  need {need:>4}   {'PASS' if ok else 'FAIL'}")
+    return bad
+
+
+def main():
+    light, dark, media = themes()
+
+    drift = {k for k in set(dark) | set(media) if dark.get(k) != media.get(k)}
+    missing = set(light) - set(dark) - {"--font"}
+    missing = {k for k in missing if k.startswith(("--paper", "--ink", "--line", "--accent",
+                                                  "--focus", "--btn", "--card", "--loc", "--shadow"))}
+
+    bad = check("LIGHT", light) + check("DARK", dark)
+
     print()
+    if drift:
+        print(f"MISMATCH: the data-theme block and the prefers-color-scheme block "
+              f"disagree on {', '.join(sorted(drift))}")
+        bad += len(drift)
+    if missing:
+        print(f"MISSING in dark: {', '.join(sorted(missing))}")
+        bad += len(missing)
+
     if bad:
-        print(f"{bad} pair(s) below WCAG AA.")
+        print(f"\n{bad} problem(s).")
         return 1
-    print("All pairs meet WCAG 2.1 AA.")
+    print("Both themes meet WCAG 2.1 AA, and the two dark blocks agree.")
     return 0
 
 

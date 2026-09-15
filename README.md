@@ -40,7 +40,8 @@ tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
-tools/check-contrast.py checks every colour pair against WCAG AA
+tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
+theme.js                light/dark, set before first paint and remembered
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
 netlify.toml _headers _redirects   Netlify configuration
 ```
@@ -101,6 +102,56 @@ Edit the nav in `index.html`, then:
 python3 tools/sync-shell.py          # stamp it into the rest
 python3 tools/sync-shell.py --check  # report drift, write nothing
 ```
+
+## Colour
+
+**Sage, because sage is Helen's colour** — and because our other sites are all cream:
+queering.earth on warm vellum, cavendish.app on Solarized light. This one needed to look like
+itself.
+
+The ground is built on the hue of **#aac5c0**, the sage in the Deep Pressure card, and every
+accent is one of the five pigments Helen already painted the deck with, sampled straight out of
+`cards/print/*-locution.png` rather than picked to match:
+
+| | | |
+|---|---|---|
+| Infodumping | `#bba4b8` | dusty mauve |
+| Parallel Play | `#ddbbba` | dusty rose |
+| Support Swapping | `#c3beaf` | taupe |
+| Penguin Pebbling | `#e8e1ce` | warm sand |
+| Deep Pressure | `#aac5c0` | sage — the ground is built on this |
+
+Every one of those sits between 14% and 36% saturation. **The deck was drawn low-stimulation
+already**; the site follows it rather than inventing a mood of its own.
+
+**Low stimulation is about surfaces, not text.** Paper, panel and sunk are within a few percent
+of each other, there is no pure white and no pure black anywhere, and the hues stay muted — while
+text contrast stays high. The lowest text pair on the page is 4.98:1 in light and 5.27:1 in dark,
+against the 4.5:1 AA asks for. Muting the text too would be the easy mistake, and it would hurt
+exactly the readers this is for.
+
+## Dark mode
+
+Follows the system by default, in CSS alone — so it works with JavaScript off. `theme.js` only
+stores a deliberate override, which means someone who never touches the toggle keeps following
+their OS, including when it changes at sunset.
+
+It is loaded from `<head>` **without `defer`**, deliberately: the attribute has to be set before
+the first paint, or a reader who chose dark gets a flash of the full-brightness page first — on a
+site built for sensory needs, the one bug least worth having.
+
+**The cards are cream, and in dark mode that is a problem the palette cannot solve.** A
+full-brightness cream rectangle against a near-black page is a glare line at every edge. The card
+sits on a lifted mat between the two instead. **The artwork itself is never dimmed, filtered or
+recoloured** — it is the content, and a washed-out card is a worse answer than a bright one.
+
+```bash
+python3 tools/check-contrast.py   # both themes, 48 pairs
+```
+
+That tool checks light *and* dark, and also that the `data-theme` block and the
+`prefers-color-scheme` block have not drifted apart — two copies of one palette being the obvious
+way this breaks later.
 
 ## Typography
 

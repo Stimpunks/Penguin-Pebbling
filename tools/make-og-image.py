@@ -5,8 +5,8 @@ shared on Bluesky, Discord, Mastodon, Slack or anywhere else that unfurls a link
 Social cards want 1200x630 (1.91:1). The cards are 1748x1240 (1.41:1), so a
 width-fit crop would cut off the "Penguin Pebbling Game" title at the top and the
 "Autistic Realms & Stimpunks" credit at the bottom — the two things a share image
-most needs to keep. It is letterboxed on the warm paper instead, which keeps the
-whole card and reads as deliberate rather than cropped.
+most needs to keep. It is letterboxed on the site's sage instead, which keeps the whole
+card and reads as deliberate rather than cropped.
 
 PNG, not WebP: unfurlers are the least modern consumers of a site's images and
 several still refuse WebP.
@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "cards" / "print" / "penguin-pebbling-locution.png"
 TARGET = ROOT / "og-image.png"
 W, H = 1200, 630
-PAPER = "#f5f0eb"
+PAPER = "#eaf1ef"   # --paper-warm; the share card sits on the site's own sage
 PAD = 24
 
 

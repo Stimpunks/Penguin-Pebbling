@@ -7,10 +7,13 @@
 <meta name="description" content="Download the printable Penguin Pebbling card deck, plus the Plain Language and Easy Read guides. All free.">
 <meta name="author" content="Helen Edgar, Autistic Realms &amp; Ryan Boren, Stimpunks">
 <link rel="canonical" href="https://penguinpebbling.app/print">
+<script src="theme.js"></script>
 <link rel="stylesheet" href="penguin-pebbling.css">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#eaf1ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141a19" media="(prefers-color-scheme: dark)">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Penguin Pebbling">
@@ -41,6 +44,9 @@
         </ul>
       </details>
       <a class="topbar-cta" href="index.html">Play the game</a>
+      <button id="theme-toggle" type="button" class="theme-toggle" hidden aria-pressed="false">
+        <span class="theme-icon" aria-hidden="true">☀</span><span class="theme-text">Light</span>
+      </button>
     </div>
   </div>
   <!-- /shell:nav -->

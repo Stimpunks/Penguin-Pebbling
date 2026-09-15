@@ -34,6 +34,41 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 ## Settled during the import
 
+### Sage, from Helen's own cards — and a dark mode
+
+Ryan's call, 2026-09-14: *"I like cream backgrounds, but we use them everywhere."* He is right —
+queering.earth is warm vellum `#f5efe2`, cavendish.app light is Solarized `#fdf6e3`, and this
+site launched on `#faf8f5`. Three sites, one ground. Helen's favourite colour is sage.
+
+**The palette was sampled, not chosen.** The ground is built on the hue of `#aac5c0` — the sage
+in her Deep Pressure card — and the five locution tints are her five card pigments, read straight
+out of `cards/print/*-locution.png`: dusty mauve, dusty rose, taupe, warm sand, sage. All five
+land between 14% and 36% saturation, which is the finding that settled the brief: **the deck is
+already low-stimulation, so the site should follow it rather than invent a mood.** Sage and cream
+is also the pairing Helen drew into the Deep Pressure card herself, so the cream artwork sits on
+the sage page as a deliberate combination rather than a clash to be managed.
+
+**Low stimulation is about surfaces, not text**, and that distinction is the whole design. Paper,
+panel and sunk sit within a few percent of each other, there is no pure white or pure black, and
+no hue is loud. Text contrast is high: 4.98:1 at the lowest in light, 5.27:1 in dark. Muting the
+text as well is the easy version of this brief and it would hurt the readers it is meant to serve.
+
+**Dark mode follows the system in CSS alone**, so it works with JavaScript off. `theme.js` stores
+only a deliberate override, which keeps an untouched browser tracking the OS at sunset. It loads
+from `<head>` without `defer` on purpose — deferred, a reader who chose dark gets a flash of the
+bright page before the attribute lands.
+
+**The cards stay bright, and sit on a mat.** Cream artwork against a near-black page is a glare
+line at every edge, and the obvious fix — a brightness filter — misrepresents Helen's work. A
+lifted surface under the card closes the gap without touching a pixel of it.
+
+`tools/check-contrast.py` grew to cover both themes, all 48 pairs, plus a check that the
+`data-theme` and `prefers-color-scheme` blocks still agree: two copies of one palette is exactly
+how this drifts later, and it would drift silently.
+
+The favicon, the apple-touch icon, the manifest colours and the share card were repainted to
+match, and the pages carry per-scheme `theme-color`.
+
 ### Netlify rewrites the markup on the way out, and the canonical follows it
 
 Found 2026-09-14, right after the page split. The published HTML is not the HTML in this

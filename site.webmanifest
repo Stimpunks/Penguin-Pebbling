@@ -4,8 +4,8 @@
   "description": "A neuro-affirming card game built around the Five Autistic Love Locutions.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#faf8f5",
-  "theme_color": "#f5f0eb",
+  "background_color": "#f4f8f7",
+  "theme_color": "#eaf1ef",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" },
     { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
