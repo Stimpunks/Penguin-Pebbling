@@ -34,6 +34,33 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 ## Settled during the import
 
+### Netlify rewrites the markup on the way out, and the canonical follows it
+
+Found 2026-09-14, right after the page split. The published HTML is not the HTML in this
+repository: `href="how-to-play.html"` is served as `href='/how-to-play'`, double quotes become
+single, and attribute order changes. That is Netlify's **Pretty URLs**, a site-level setting —
+`skip_processing = true` in `netlify.toml` does not cover it, because that governs asset
+optimisation (minifying, image compression) and this is separate HTML post-processing.
+
+**It is on for cavendish.app and queering.earth too**, and has been all along; their published
+navs serve `/guidebook` from `guidebook.html` exactly the same way. So this is how our Netlify
+sites behave, not something new here.
+
+It left a real inconsistency for a few minutes, though: the nav linked `/print` while the
+canonical said `/print.html`, and both served 200. Two URLs for one page, reconciled only by a
+tag. **The canonical, `og:url` and the sitemap are extensionless now**, matching what is linked
+and what is served. The `.html` stays in the source hrefs so the pages work over a plain local
+file server, and Netlify rewrites them on the way out.
+
+The `_redirects` rules for `/print`, `/how-to-play`, `/locutions` and `/about` were removed as
+dead weight — Netlify already serves those. `/downloads` and `/game` keep theirs, because those
+never named a page.
+
+**The general shape is familiar**: the source is clean and only the served page differs, which
+is the same reason the WordPress hazards in the knowledge system are all "check it after
+publishing". A diff of the live HTML against the repository will never be clean here — check
+what the page *does*, not whether its bytes match.
+
 ### The game moved to the front, and the prose moved to its own pages
 
 Ryan's call, 2026-09-14, pointing at [cavendish.app](https://cavendish.app/), which had already

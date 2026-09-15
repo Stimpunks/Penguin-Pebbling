@@ -3,9 +3,10 @@
 /penguin-pebbling-a-game-of-creating-belonging-building-connection-and-understanding-autistic-identity  /  301
 
 # Single-page-era anchors. These were real URLs people could have copied.
-/print                  /print.html        301
+#
+# Only the two that no longer name a page need a rule. /print, /how-to-play,
+# /locutions and /about are served directly by Netlify's Pretty URLs, which also
+# rewrites every `href="x.html"` in the markup to `/x` on the way out — see
+# DECISIONS.md. Rules for those would be dead weight at best.
 /downloads              /print.html        301
 /game                   /                  301
-/how-to-play            /how-to-play.html  301
-/locutions              /locutions.html    301
-/about                  /about.html        301
