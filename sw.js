@@ -10,7 +10,7 @@
  * being stuck on an old version is the usual way a service worker hurts a site.
  * The cache is the fallback here, never the source.
  */
-const VERSION = "74bc6d582285";
+const VERSION = "94594477fb34";
 const CACHE = "penguin-pebbling-" + VERSION;
 
 const PRECACHE = [

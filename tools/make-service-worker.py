@@ -108,13 +108,23 @@ def assets():
 
 
 def version(asset_paths):
-    """A hash of every precached byte on disk, plus this file.
+    """A hash of every precached byte on disk, plus this file, plus `_headers`.
 
     The pages are hashed through their .html sources rather than their served
     URLs — the bytes are the same and the file is what we have.
+
+    `_headers` is in there for a reason that cost a deploy. A browser decides
+    whether to install a new worker by comparing the script BYTE FOR BYTE; the
+    response headers are not part of that comparison. But the worker's own
+    fetches are governed by the CSP on that response, so a CSP fix changes what
+    the worker can do while changing nothing it is judged by — every browser
+    keeps the old worker, still bound by the old policy, and the fix never
+    arrives. Hashing `_headers` into the version makes a policy change a script
+    change, which is the only thing that actually forces the update.
     """
     h = hashlib.sha256()
     h.update(Path(__file__).read_bytes())
+    h.update((ROOT / "_headers").read_bytes())
     for p in asset_paths:
         h.update((ROOT / p.lstrip("/")).read_bytes())
     for html in sorted(ROOT.glob("*.html")):
