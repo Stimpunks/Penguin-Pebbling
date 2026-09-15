@@ -4,7 +4,7 @@
 The site's own address is written into every page's canonical link, og:url and
 og:image, plus the JSON-LD `url` and `license` on index.html, the Sitemap line in
 robots.txt, and one <loc> per page in sitemap.xml. That is dozens of places
-across nine files, and it grows every time a page is added. There is no build step to
+across ten files, and it grows every time a page is added. There is no build step to
 derive them from one constant, so without this they get changed by hand and one
 gets missed — and the one that gets missed is usually the canonical, which is the
 single worst one to point at a domain that does not resolve.
@@ -27,7 +27,7 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent.parent
 FILES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
          "about.html", "changelog.html", "privacy.html", "robots.txt",
-         "sitemap.xml"]
+         "sitemap.xml", "llms.txt"]
 
 # Every origin this site has ever been addressed by. A new one is added here the
 # first time it is used, so the rewrite can always find what it is replacing.

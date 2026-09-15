@@ -1,0 +1,30 @@
+# Penguin Pebbling
+
+> A neuro-affirming card game built around the Five Autistic Love Locutions. Draw a card, share in whatever way feels right, pass a pebble. No winners, no wrong way to play.
+
+A neuro-affirming card game about belonging, connection and Autistic identity, built around the Five Autistic Love Locutions: infodumping, parallel play, support swapping, deep pressure, and penguin pebbling itself. Developed by Helen Edgar (Autistic Realms) and Ryan Boren (Stimpunks), 2026. Free to use, share and adapt for non-commercial purposes — please credit both and link back.
+
+**The 30 card prompts appear in no HTML.** They live in `penguin-pebbling.js` and are drawn into the page by script, so fetching the front page gets the game's furniture and none of the deck. The prompts are published as JSON instead — fetch that rather than scraping the game.
+
+## The deck
+
+- [All 30 card prompts, as JSON](https://penguinpebbling.app/search-index.json): every prompt with its locution and card name. This is the game's actual content.
+
+## The game
+
+- [Penguin Pebbling](https://penguinpebbling.app/): The game itself. Draw a card, filter by locution, pass a pebble. This is the page the prompts are rendered into, and the reason the JSON above exists.
+- [How to play](https://penguinpebbling.app/how-to-play): What you need, how to begin, taking turns, passing a pebble, and how a game of Penguin Pebbling ends. There are no winners and no wrong way to play.
+- [The five locutions](https://penguinpebbling.app/locutions): Infodumping, parallel play, support swapping, penguin pebbling and deep pressure — the Five Autistic Love Locutions the game is built around.
+- [Print & download](https://penguinpebbling.app/print): Download the printable Penguin Pebbling card deck, plus the Plain Language and Easy Read guides. All free.
+
+## Optional
+
+- [About & credits](https://penguinpebbling.app/about): Where Penguin Pebbling came from, a note for therapists and educators, the licence, and how to cite it.
+- [Changelog](https://penguinpebbling.app/changelog): What has changed in the Penguin Pebbling game and on this site, newest first.
+- [Privacy](https://penguinpebbling.app/privacy): This site collects nothing about you. No cookies, no analytics, no tracking, no third parties. Here is exactly what happens when you visit.
+
+## Downloads
+
+- [Plain Language Guide](https://penguinpebbling.app/downloads/penguin-pebbling-plain-language.pdf)
+- [Easy Read Guide](https://penguinpebbling.app/downloads/penguin-pebbling-easy-read.pdf)
+- [Card deck](https://penguinpebbling.app/downloads/penguin-pebbling-card-deck.pdf)

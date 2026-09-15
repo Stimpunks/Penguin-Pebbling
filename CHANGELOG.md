@@ -4,6 +4,12 @@ Notable changes to Penguin Pebbling — both the **game** (the cards, the prompt
 
 Each dated entry is split into **Game** and **Site**. An entry only carries the sections that changed.
 
+## 2026-09-15
+
+### Site
+
+- **The site now publishes [an index for language models](https://penguinpebbling.app/llms.txt).** The thirty card prompts are drawn into the page by script and appear in nothing that reads the HTML, so anything summarising this site was getting the furniture and none of the game. The index says so in as many words and points at the prompts, which have been published as data since yesterday. It is generated from the pages themselves, so it cannot quietly fall out of date.
+
 ## 2026-09-14
 
 ### Game

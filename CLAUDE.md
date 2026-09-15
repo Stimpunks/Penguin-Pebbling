@@ -29,6 +29,7 @@ Helen Edgar and Ryan Boren both have rights to this work. **So *you* is whoever 
 | `cards/` (35 WebP) | `cards/print/` (the PNG masters) | `tools/make-images.py` |
 | `changelog.html` | `CHANGELOG.md` | `tools/build-changelog.py` |
 | `search-index.json` | `penguin-pebbling.js` | `tools/make-search-index.py` |
+| `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
 | `og-image.png` | drawn from scratch | `tools/make-og-image.py` |
 | the nav and footer in every page but `index.html` | the marked blocks in `index.html` | `tools/sync-shell.py` |
 
@@ -48,7 +49,7 @@ Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** —
 
 ## The tools
 
-Seven, all Python, all run by hand, none wired into a build. Four take `--check`, which reports drift and writes nothing.
+Eight, all Python, all run by hand, none wired into a build. Five take `--check`, which reports drift and writes nothing.
 
 | Tool | What it does | `--check`? |
 |---|---|---|
@@ -57,6 +58,7 @@ Seven, all Python, all run by hand, none wired into a build. Four take `--check`
 | `tools/build-changelog.py` | renders `CHANGELOG.md` into `changelog.html` | yes |
 | `tools/make-search-index.py` | publishes the deck's text at `/search-index.json` | yes |
 | `tools/set-domain.py` | rewrites the site's own address everywhere at once | yes |
+| `tools/make-llms-txt.py` | regenerates `llms.txt`, the curated index for language models | yes |
 | `tools/make-images.py` | regenerates `cards/` from `cards/print/` | no |
 | `tools/make-og-image.py` | regenerates `og-image.png` | no |
 
@@ -66,13 +68,14 @@ Seven, all Python, all run by hand, none wired into a build. Four take `--check`
 
 ## Verifying a change
 
-There is no test suite. There are five checks, and they are fast — run them all before calling anything done:
+There is no test suite. There are six checks, and they are fast — run them all before calling anything done:
 
 ```bash
 python3 tools/sync-shell.py --check
 python3 tools/check-contrast.py
 python3 tools/build-changelog.py --check
 python3 tools/make-search-index.py --check
+python3 tools/make-llms-txt.py --check
 python3 tools/set-domain.py --check
 ```
 

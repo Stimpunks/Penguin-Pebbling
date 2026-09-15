@@ -39,6 +39,7 @@ cards/print/            the same 35 as Helen's original PNGs (1748x1240) — pri
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
 og-image.png            1200x630 share card, for links unfurled on social
 search-index.json       generated from penguin-pebbling.js — the deck's text, for our mirror
+llms.txt                generated from the pages — a short map of the site for LLMs
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
@@ -46,6 +47,7 @@ tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/build-changelog.py renders CHANGELOG.md into changelog.html
 tools/make-search-index.py publishes the deck's text for archivers and our mirror
 tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
+tools/make-llms-txt.py  regenerates llms.txt, the curated index for language models
 theme.js                light/dark, set before first paint and remembered
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
 netlify.toml _headers _redirects   Netlify configuration
