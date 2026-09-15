@@ -42,6 +42,7 @@ tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/build-changelog.py renders CHANGELOG.md into changelog.html
+tools/make-search-index.py publishes the deck's text for archivers and our mirror
 tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
 theme.js                light/dark, set before first paint and remembered
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence

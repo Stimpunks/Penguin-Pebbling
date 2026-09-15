@@ -57,3 +57,8 @@
 
 /theme.js
   Cache-Control: public, max-age=0, must-revalidate
+
+# Generated from penguin-pebbling.js, so it revalidates with it. This is what our
+# own site mirror reads to get the deck's text — see tools/make-search-index.py.
+/search-index.json
+  Cache-Control: public, max-age=0, must-revalidate
