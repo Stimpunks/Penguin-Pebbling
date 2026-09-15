@@ -173,10 +173,15 @@ It is loaded from `<head>` **without `defer`**, deliberately: the attribute has 
 the first paint, or a reader who chose dark gets a flash of the full-brightness page first — on a
 site built for sensory needs, the one bug least worth having.
 
-**The cards are cream, and in dark mode that is a problem the palette cannot solve.** A
-full-brightness cream rectangle against a near-black page is a glare line at every edge. The card
-sits on a lifted mat between the two instead. **The artwork itself is never dimmed, filtered or
-recoloured** — it is the content, and a washed-out card is a worse answer than a bright one.
+**The card follows the theme too, which it could not do while it was a picture.** A
+full-brightness cream rectangle against a near-black page is a glare line at every edge, and while
+the card *was* Helen's artwork the only honest answer was a lifted mat under it — dimming someone's
+artwork misrepresents it. Re-setting the deck as text removed the constraint: the panels are CSS, so
+in dark mode they are a warm dark with light warm text.
+
+**The cream ellipse inside each illustration stays bright on purpose.** The penguins are
+black-outline drawings and need a light ground; against the darkened panel it reads as a spotlight.
+Helen's drawings themselves are still never dimmed, filtered or recoloured.
 
 ```bash
 python3 tools/check-contrast.py   # both themes, 48 pairs

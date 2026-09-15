@@ -119,6 +119,8 @@ Already in place and worth not regressing: a skip link, real `<button>`s with `a
 
 **That means the card's colours are this site's responsibility.** Helen letters her cards in `#b28a5e` on cream, which is 2.57:1 and was never measured while it was inside a picture. The ink keeps her hue and saturation and moves only in lightness; `tools/check-contrast.py` measures all eight card pairs. **Do not "restore fidelity" by putting her original ink back** — read the entry in `DECISIONS.md` first.
 
+**The card follows the theme, and the pebble stack is inline SVG for that reason.** An SVG loaded with `<img src>` is its own document and cannot see this page's `data-theme`, so it would track the OS and ignore the toggle. `pebbleStack()` builds it in the DOM so it inherits `color`. Do not "tidy" it into an `<img>`.
+
 **The card deliberately has no fixed aspect ratio.** Reflowing is the whole reason the deck was re-set: the prompt has to be allowed to make the card taller at 400% zoom rather than overflow it. A rule that pins the card to 1.41:1 undoes the change.
 
 **Contrast is measured, not eyeballed.** `tools/check-contrast.py` covers both themes and also checks that the `data-theme` and `prefers-color-scheme` blocks have not drifted apart — two copies of one palette being the obvious way this breaks later. Low stimulation here is about surfaces, not text: muting the text too would hurt exactly the readers this is for.

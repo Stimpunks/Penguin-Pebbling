@@ -59,10 +59,14 @@ def themes():
 
     # The toggle's block is the authority for dark; the prefers-color-scheme block
     # must agree with it, and that is checked below rather than assumed.
-    dark_start = text.index(':root[data-theme="dark"] {')
+    #
+    # Anchored on --paper for the same reason light is anchored on color-scheme:
+    # the card palette keeps dark blocks of its own further up the file, and
+    # "the first one" silently became the wrong one when they were added.
+    dark_start = text.index(':root[data-theme="dark"] {\n  --paper:')
     dark = tokens_in(text[dark_start:text.index("\n}", dark_start)])
 
-    media_start = text.index(':root:not([data-theme="light"]) {')
+    media_start = text.index(':root:not([data-theme="light"]) {\n    --paper:')
     media = tokens_in(text[media_start:text.index("\n  }", media_start)])
 
     return light, dark, media
@@ -101,18 +105,28 @@ CARD_LOCS = ["infodumping", "parallel-play", "support-swapping",
 
 
 def card_tokens():
-    """The re-set deck's own colours, which do not vary by theme.
+    """The re-set deck's colours, light and dark.
 
-    The card is Helen's artwork and stays bright in dark mode — dimming it would
-    misrepresent the work — so these are one set of pairs, not two.
+    The card followed the theme from the moment it stopped being a picture, so
+    these are two sets of pairs. Each theme is layered the way the browser
+    resolves it — the light values first, then whatever dark overrides.
     """
     text = CSS.read_text(encoding="utf-8")
-    start = text.index("/* card-art:palette")
-    block = text[start:text.index("/* /card-art:palette */")]
-    t = tokens_in(block)
-    ink_start = text.index(":root {\n  --card-ink:")
-    t.update(tokens_in(text[ink_start:text.index("\n}", ink_start)]))
-    return t
+
+    def block_after(anchor, close="\n}"):
+        start = text.index(anchor)
+        return tokens_in(text[start:text.index(close, start)])
+
+    art_start = text.index("/* card-art:palette")
+    art = text[art_start:text.index("/* /card-art:palette */")]
+
+    light = tokens_in(art[:art.index(":root[data-theme")])
+    light.update(block_after(":root {\n  --card-ground:"))
+
+    dark = dict(light)
+    dark.update(tokens_in(art[art.index(':root[data-theme="dark"] {'):]))
+    dark.update(block_after(':root[data-theme="dark"] {\n  --card-ground:'))
+    return light, dark
 
 
 def card_pairs(t):
@@ -122,11 +136,13 @@ def card_pairs(t):
     the point: nothing measured Helen's #b28a5e on her cream, which is 2.57:1. As
     real text it is this site's responsibility, so it is measured here.
     """
-    cream = t["--card-cream"]
+    # In light --card-ground is `var(--card-cream)`, which is not a hex value and
+    # so never lands in the token map; the cream it points at is what to measure.
+    ground = t.get("--card-ground") or t["--card-cream"]
     out = [
-        ("prompt on card cream",   t["--card-ink"], cream, False),
-        ("locution name on cream", t["--card-ink"], cream, True),
-        ("aside on card cream",    t["--card-ink"], cream, False),
+        ("prompt on card ground",   t["--card-ink"], ground, False),
+        ("locution name on ground", t["--card-ink"], ground, True),
+        ("aside on card ground",    t["--card-ink"], ground, False),
     ]
     for k in CARD_LOCS:
         out.append((f"panel text on {k}", t["--card-ink-panel"], t[f"--card-tint-{k}"], False))
@@ -155,15 +171,16 @@ def main():
 
     bad = check("LIGHT", light) + check("DARK", dark)
 
-    # The re-set card is one set of colours in both themes, so it is checked once.
-    ct = card_tokens()
-    print("\n── CARD (both themes) " + "─" * 35)
-    for label, fg, bg, large in card_pairs(ct):
-        r = ratio(fg, bg)
-        need = 3.0 if large else 4.5
-        ok = r >= need
-        bad += not ok
-        print(f"  {label:28} {r:6.2f}:1  need {need:>4}   {'PASS' if ok else 'FAIL'}")
+    # The card follows the theme now, so it is checked in both.
+    card_light, card_dark = card_tokens()
+    for theme, ct in (("LIGHT", card_light), ("DARK", card_dark)):
+        print(f"\n── CARD, {theme} " + "─" * (46 - len(theme)))
+        for label, fg, bg, large in card_pairs(ct):
+            r = ratio(fg, bg)
+            need = 3.0 if large else 4.5
+            ok = r >= need
+            bad += not ok
+            print(f"  {label:28} {r:6.2f}:1  need {need:>4}   {'PASS' if ok else 'FAIL'}")
 
     print()
     if drift:

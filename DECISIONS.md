@@ -10,6 +10,22 @@ What was chosen during the import, why, and what is still open. Newest at the to
 
 ## Settled during the import
 
+### The card follows the theme, and the pebbles are vector
+
+Ryan's call, 2026-09-15, immediately after the re-set landed: *"Go theme-aware with the SVG pebbles."*
+
+**The rule that the card stays bright no longer applied, and it is worth being clear why.** The card stayed cream in dark mode because it *was* Helen's artwork, and dimming someone's artwork misrepresents it; the lifted mat under it was a workaround for the glare, not a fix. Re-setting the deck as text removed the constraint rather than answering it — the panels are CSS now and only the drawings are hers. So the card can follow the theme like everything else on the site, which on a page built for sensory needs is what it should have been doing all along.
+
+**The cream ellipse inside each illustration deliberately stays bright.** The penguins are black-outline drawings and need a light ground beneath them. On the darkened panel it reads as a spotlight rather than as the glare line a full cream card was.
+
+**Helen's watercolour pebbles could not come along, and that was tested rather than assumed.** A theme-aware card needs a pebble stack with no background, and her stack is watercolour on flat cream. Keying the cream out makes the stones' pale interiors transparent. Flood-filling from the edge — which only removes background actually connected to the border — is the right technique and still fails: the middle stone's highlight is the same value as the ground *and touches the edge*, so the fill leaks in and leaves a hole straight through the stone. Tightening the tolerance moves the failure rather than removing it.
+
+So the card draws the three flat pebbles from `favicon.svg`, which are Helen's palette already and carry no background. **Inline, not `<img src="favicon.svg">`**, and that distinction matters: an SVG loaded as an image is its own document and cannot see this page's `data-theme` attribute, so it would follow the operating system and quietly ignore the toggle. Drawn into the DOM it inherits `color` and both paths work — verified with the OS set to light and the toggle set to dark.
+
+The watercolour stack is untouched in `cards/print/` and is still what is on the printed deck.
+
+**One ink in dark where light needs two.** On the dark ground and on all five dark tints it lands between 10:1 and 12:1, so splitting it would buy nothing. The dark tints are Helen's own pigments at the lightness the rest of the dark palette already uses — about 15% — derived by `tools/make-card-art.py` rather than picked, so the card and the locution panels elsewhere darken as one thing. `tools/check-contrast.py` now measures sixteen card pairs, eight per theme.
+
 ### The deck is re-set as text
 
 **Decided 2026-09-15. This was the last open item, and it was Helen's.** Done.

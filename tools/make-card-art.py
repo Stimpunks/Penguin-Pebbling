@@ -19,10 +19,20 @@ inscribed ellipse over the detected bounding box lands on the artwork's own edge
 and the locution tint behind it then comes from CSS. Nothing has to match a
 sampled colour for the join to be invisible.
 
-**The pebbles keep their cream.** They are watercolour with soft edges, and
-keying a background out from under a soft edge leaves a halo. A plain rectangle
-on the exact cream of the panel is seamless instead — which is why this tool also
-writes that cream into the stylesheet rather than leaving somebody to type it.
+**The pebble stack is no longer cut out at all.** It was, while the card was
+always cream: a plain rectangle on the exact cream of the panel is seamless, and
+keying the background out from under watercolour's soft edges leaves a halo. Once
+the card followed the theme that stopped working — on a dark ground the cut-out
+showed a hole through the middle stone, because the stone's own highlights are
+the same value as the cream behind it and touch the edge, so a flood fill leaks
+straight in. The card draws the flat pebbles from favicon.svg inline instead,
+where they take their colour from the theme. Helen's watercolour stack is
+untouched in cards/print/ and still on the printed deck.
+
+**The tints are emitted for both themes.** The dark ones are Helen's own pigments
+at the lightness the rest of this site's dark mode uses (about 15%), derived
+here rather than typed, so the five card panels and the five locution panels
+elsewhere on the site are darkened the same way.
 
 Geometry is detected, not hard-coded: the panel split is the first column that is
 mostly locution tint, the ellipse is the cream inside that panel, and the pebbles
@@ -56,14 +66,12 @@ LOCUTIONS = {
     "penguin-pebbling": "penguin-pebbling-1.png",
     "deep-pressure": "deep-pressure-1.png",
 }
-PEBBLE_SOURCE = "parallel-play-1.png"
 
 ELLIPSE_W = 560     # output width; ~2x the widest it is ever displayed
 # One height for all five. The detected boxes differ by under 1%, and
 # normalising lets the markup carry exact width/height attributes — so the
 # space is reserved correctly before the image lands and nothing shifts.
 ELLIPSE_H = 770
-PEBBLE_W = 200
 SUPERSAMPLE = 4     # for a smooth alpha edge on the ellipse mask
 
 MARK_OPEN = "/* card-art:palette — written by tools/make-card-art.py */"
@@ -155,33 +163,38 @@ def build():
         palette[slug] = tint
         palette.setdefault("cream", cream)
 
-    with Image.open(PRINT / PEBBLE_SOURCE) as im:
-        im = im.convert("RGB")
-        W, H = im.size
-        px = im.load()
-        split, cream, _, _ = analyse(im)
-        xs, ys = [], []
-        for x in range(int(split * 0.12), int(split * 0.90), 2):
-            for y in range(int(H * 0.02), int(H * 0.22), 2):
-                if not near(px[x, y], cream, 26):
-                    xs.append(x)
-                    ys.append(y)
-        box = (min(xs), min(ys), max(xs), max(ys))
-        peb = im.crop(box)
-        peb = peb.resize((PEBBLE_W, round(peb.height * PEBBLE_W / peb.width)), Image.LANCZOS)
-    buf = io.BytesIO()
-    peb.save(buf, format="WEBP", quality=90, method=6)
-    files["pebbles.webp"] = buf.getvalue()
-
     return files, palette
+
+
+def darken(rgb):
+    """Helen's pigment at this site's dark-mode lightness.
+
+    Measured off the locution panels the dark palette already ships: they sit at
+    about 15% lightness and 16% saturation with the hue left alone. Deriving the
+    card tints the same way rather than picking them means the card and the rest
+    of the page darken as one thing.
+    """
+    import colorsys
+    h, _, _ = colorsys.rgb_to_hls(*[v / 255 for v in rgb])
+    return tuple(round(v * 255) for v in colorsys.hls_to_rgb(h, 0.155, 0.16))
 
 
 def css_block(palette):
     hexa = lambda c: "#%02x%02x%02x" % tuple(c)
-    lines = [MARK_OPEN, ":root {", f"  --card-cream: {hexa(palette['cream'])};"]
-    for slug in LOCUTIONS:
-        lines.append(f"  --card-tint-{slug}: {hexa(palette[slug])};")
-    lines += ["}", MARK_CLOSE]
+    light = [f"  --card-tint-{s}: {hexa(palette[s])};" for s in LOCUTIONS]
+    dark = [f"  --card-tint-{s}: {hexa(darken(palette[s]))};" for s in LOCUTIONS]
+    lines = [MARK_OPEN,
+             ":root {", f"  --card-cream: {hexa(palette['cream'])};", *light, "}",
+             "",
+             "/* Dark mode, in both the places this site keeps a dark palette. Written",
+             " * together so the two cannot disagree — the failure check-contrast.py",
+             " * exists to catch on the main palette is simply unavailable here. */",
+             ':root[data-theme="dark"] {', *dark, "}",
+             "@media (prefers-color-scheme: dark) {",
+             '  :root:not([data-theme="light"]) {',
+             *["  " + d for d in dark],
+             "  }", "}",
+             MARK_CLOSE]
     return "\n".join(lines)
 
 

@@ -92,6 +92,39 @@ function el(tag, className, text) {
   return node;
 }
 
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+/* The three stacked pebbles from favicon.svg, inline.
+ *
+ * Inline rather than <img src="favicon.svg"> because an SVG loaded as an image
+ * is its own document: it cannot see this page's data-theme attribute, so it
+ * could follow the OS setting and never the toggle. Drawn here it inherits
+ * `color` and the theme moves it like everything else.
+ *
+ * Helen's watercolour stack is still the one on the printed deck. It cannot come
+ * to a dark card: its highlights are the same value as the cream behind it and
+ * touch the edge of the drawing, so no cut-out separates them — the middle stone
+ * ends up with a hole through it. See DECISIONS.md.
+ */
+function pebbleStack() {
+  const svg = document.createElementNS(SVG_NS, "svg");
+  svg.setAttribute("viewBox", "12 11 40 45");
+  svg.setAttribute("aria-hidden", "true");
+  svg.setAttribute("focusable", "false");
+  svg.setAttribute("class", "pcard-pebbles");
+  // cx, cy, rx, ry, opacity — bottom stone solid, each one above it lighter
+  [[32, 46, 19, 8.5, 1], [32, 32, 14.5, 7.5, 0.74], [32, 19.5, 10, 6, 0.54]]
+    .forEach(([cx, cy, rx, ry, opacity]) => {
+      const e = document.createElementNS(SVG_NS, "ellipse");
+      e.setAttribute("cx", cx); e.setAttribute("cy", cy);
+      e.setAttribute("rx", rx); e.setAttribute("ry", ry);
+      e.setAttribute("fill", "currentColor");
+      e.setAttribute("opacity", opacity);
+      svg.append(e);
+    });
+  return svg;
+}
+
 function renderCard(card) {
   const area = document.getElementById("card-area");
   area.replaceChildren();
@@ -110,13 +143,7 @@ function renderCard(card) {
   pcard.dataset.locution = slug;
 
   const left = el("div", "pcard-text");
-  const pebbles = document.createElement("img");
-  pebbles.src = "cards/art/pebbles.webp";
-  pebbles.alt = "";
-  pebbles.width = 200;
-  pebbles.height = 220;
-  pebbles.decoding = "async";
-  pebbles.className = "pcard-pebbles";
+  const pebbles = pebbleStack();
 
   const locution = el("div", "pcard-locution", card.name);
   const prompt = el("div", "pcard-prompt");

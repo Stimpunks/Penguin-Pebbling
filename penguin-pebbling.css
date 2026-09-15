@@ -58,6 +58,26 @@
   --card-tint-penguin-pebbling: #e8e1ce;
   --card-tint-deep-pressure: #aac5c0;
 }
+
+/* Dark mode, in both the places this site keeps a dark palette. Written
+ * together so the two cannot disagree — the failure check-contrast.py
+ * exists to catch on the main palette is simply unavailable here. */
+:root[data-theme="dark"] {
+  --card-tint-infodumping: #2e212c;
+  --card-tint-parallel-play: #2e2221;
+  --card-tint-support-swapping: #2e2b21;
+  --card-tint-penguin-pebbling: #2e2a21;
+  --card-tint-deep-pressure: #212e2c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --card-tint-infodumping: #2e212c;
+    --card-tint-parallel-play: #2e2221;
+    --card-tint-support-swapping: #2e2b21;
+    --card-tint-penguin-pebbling: #2e2a21;
+    --card-tint-deep-pressure: #212e2c;
+  }
+}
 /* /card-art:palette */
 
 /* The two inks the re-set deck is drawn in.
@@ -75,8 +95,37 @@
  * one that decides: this value clears 5:1 on all five. tools/check-contrast.py
  * measures every one of these pairs. */
 :root {
+  --card-ground: var(--card-cream);
   --card-ink: #6c5133;
   --card-ink-panel: #473522;
+  --card-pebble: #7f9c96;
+}
+
+/* Dark mode. The card used to stay cream in the dark whatever else happened,
+ * because it WAS Helen's artwork and dimming someone's artwork misrepresents it
+ * — DECISIONS.md worked around the glare with a lifted mat instead. Re-setting
+ * the deck as text removed that constraint: the panels are CSS now and only the
+ * drawings are hers, so the card can follow the theme like everything else.
+ *
+ * The cream ellipse inside each illustration deliberately stays bright. The
+ * penguins are black-outline drawings and need a light ground under them; on the
+ * darkened panel it reads as a spotlight rather than as glare.
+ *
+ * One ink in dark, where light needs two: on this ground and on all five dark
+ * tints it lands between 10:1 and 12:1, so splitting it would buy nothing. */
+:root[data-theme="dark"] {
+  --card-ground: #1f1c16;
+  --card-ink: #e2daca;
+  --card-ink-panel: #e2daca;
+  --card-pebble: #9fb8b3;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --card-ground: #1f1c16;
+    --card-ink: #e2daca;
+    --card-ink-panel: #e2daca;
+    --card-pebble: #9fb8b3;
+  }
 }
 
 :root {
@@ -662,7 +711,7 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   grid-template-columns: 1.02fr 1fr;   /* Helen's split is 50.6 / 49.4 */
   border-radius: 12px;
   overflow: hidden;
-  background: var(--card-cream);
+  background: var(--card-ground);
   text-align: center;
 }
 
@@ -671,7 +720,10 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   display: flex; flex-direction: column; align-items: center;
   color: var(--card-ink);
 }
-.pcard-pebbles { width: 100px; height: 110px; margin-bottom: 0.75rem; }
+/* The flat pebbles from favicon.svg, drawn inline so they can take their colour
+ * from the theme — an <img> cannot see the page's data-theme attribute, and the
+ * toggle has to work, not just the OS setting. */
+.pcard-pebbles { width: 88px; height: auto; margin-bottom: 0.75rem; color: var(--card-pebble); }
 
 .pcard-locution {
   font-size: var(--text-lg); font-weight: 800;
