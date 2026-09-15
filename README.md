@@ -228,9 +228,13 @@ page loads.
 
 ## Licence
 
-**Free to use, share, and adapt for non-commercial purposes.** Please credit Helen Edgar,
-Autistic Realms and Ryan Boren, Stimpunks, and link back.
+**[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/)** — free to use, share and adapt for
+non-commercial purposes. Credit Helen Edgar, Autistic Realms and Ryan Boren, Stimpunks, link back,
+and license anything you build on it the same way.
 
-That is the licence as the game itself states it, and it is deliberately not one of the standard
-open-source licences — the code and the cards travel together here, and the cards are not MIT.
-See `ATTRIBUTIONS.md` for what belongs to whom, and `DECISIONS.md` for what is still open.
+The game described these terms in a sentence from the start. Adopting the written licence on
+2026-09-15 did not change what was allowed; it answered the question the sentence left open —
+what happens to an adaptation — and gave a school or clinic's legal team something they already
+recognise. Not an open-source code licence, deliberately: the code and the cards travel together
+here, and the cards are not MIT. See `LICENSE.md` for the terms in full, `ATTRIBUTIONS.md` for what
+belongs to whom, and `DECISIONS.md` for what is still open.

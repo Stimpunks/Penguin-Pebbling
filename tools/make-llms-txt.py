@@ -132,8 +132,10 @@ def build():
     L.append("A neuro-affirming card game about belonging, connection and Autistic identity, built "
              "around the Five Autistic Love Locutions: infodumping, parallel play, support swapping, "
              "deep pressure, and penguin pebbling itself. Developed by Helen Edgar (Autistic Realms) "
-             "and Ryan Boren (Stimpunks), 2026. Free to use, share and adapt for non-commercial "
-             "purposes — please credit both and link back.")
+             "and Ryan Boren (Stimpunks), 2026. Licensed CC BY-NC-SA 4.0 "
+             "(https://creativecommons.org/licenses/by-nc-sa/4.0/) — free to use, share and adapt for "
+             "non-commercial purposes, with credit, a link back, and the same licence on "
+             "anything built from it.")
     L.append("")
     L.append(f"**The {n} card prompts appear in no HTML.** They live in `penguin-pebbling.js` and are "
              f"drawn into the page by script, so fetching the front page gets the game's furniture and "

@@ -10,7 +10,7 @@ Who made what, and what each thing requires of anyone using it.
 
 It was first published at Autistic Realms: <https://autisticrealms.com/penguin-pebbling-a-game-of-creating-belonging-building-connection-and-understanding-autistic-identity/> — post ID 10380, published 2026-05-23, last modified 2026-05-24.
 
-**Free to use and share for non-commercial purposes. Please credit Autistic Realms & Stimpunks and link back.**
+**Licensed [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).** Free to use, share and adapt for non-commercial purposes; please credit Autistic Realms & Stimpunks, link back, and put anything you build on it under the same licence. See `LICENSE.md`.
 
 ## The card artwork
 
@@ -39,7 +39,7 @@ It is framed through:
 
 ## This site's code
 
-The HTML, CSS and JavaScript in this repository are by Stimpunks, built on Helen's original Custom HTML block — her palette, type scale, radii and layout, kept deliberately close. The code is not separately licensed: it travels with the game under the terms above.
+The HTML, CSS and JavaScript in this repository are by Stimpunks, built on Helen's original Custom HTML block — her palette, type scale, radii and layout, kept deliberately close. The code is not separately licensed: it travels with the game under CC BY-NC-SA 4.0. This is deliberate and it is not an oversight — the code and the cards ship together here, and the cards are not MIT.
 
 ## Two publishers, one page
 

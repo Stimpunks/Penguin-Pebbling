@@ -6,7 +6,13 @@ Each dated entry is split into **Game** and **Site**. An entry only carries the 
 
 ## 2026-09-15
 
+### Game
+
+- **The prompt printed under each card is here to stay.** It went in during the move to this site so the words could be zoomed, reflowed, read in your own font, selected, copied, translated or read aloud — none of which lettering inside a picture allows. Helen has approved it, so it stays.
+
 ### Site
+
+- **The licence has a name now: [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/).** The game always said *free to use, share and adapt for non-commercial purposes, please credit and link back* — this is that, written down, so a school or a clinic can point their own people at something recognised. Nothing that was allowed has stopped being allowed. One thing is now explicit that was not: if you adapt the game and share your version, it carries the same licence. Buying the deck or donating through Helen's shop is unchanged.
 
 - **A proper icon on an Android home screen, and a favicon that no longer 404s.** Installed to a phone, the pebbles were being shrunk into a white rounded square instead of filling the launcher's own shape; there is a maskable icon for that now. Anything asking for the old-fashioned `/favicon.ico` was getting nothing, and now gets the pebbles.
 - **Three accessibility repairs.** Jumping to a part of a page — from the skip link at the top, or from a link straight to the licence — was landing with the heading tucked behind the bar that stays at the top of the screen; it stops short of it now. The Privacy link in the footer was a smaller target than the guidelines allow anything standing on its own to be, and is bigger. And in Windows High Contrast mode, which replaces every colour on a page with the reader's own, the locution filter you had chosen stopped looking chosen — it now uses the colours the system sets aside for exactly that.

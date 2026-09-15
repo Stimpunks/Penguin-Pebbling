@@ -4,35 +4,41 @@ What was chosen during the import, why, and what is still open. Newest at the to
 
 ----
 
-## Open — these need Helen
+## Open — this needs Helen
 
-### 1. The card text under the card art
+### 1. Whether the deck should be re-set as text rather than pictures
 
-**Status: implemented, and the easiest thing here to reverse.**
+Follows from the card text being approved, but is much larger. The cards are 1748×1240 PNGs — beautiful, and 28.5 MB for the set. Rendering each card from text and CSS with the penguin illustration as a separate transparent image would give a deck that is a few hundred kilobytes, scales to any screen, and needs no `alt` at all because it would be text.
+
+It would also mean rebuilding Helen's typography in CSS, and the printable PDF deck would still need the PNGs. **Not proposed, only noted.** The WebP derivatives already take the page from 28.5 MB to 1.8 MB, which removes the urgency.
+
+----
+
+## Settled during the import
+
+### The card text under the card art was approved
+
+**Decided 2026-09-15. This was open item 1, and it is Helen's to decide.** Approved as built.
 
 Every prompt is lettered into the card image. On the published page that is all there is: the widget renders the picture and nothing else, and the prompt reaches a screen reader only through a 150-character `alt` prefix that cuts mid-sentence on the longer cards.
 
 Text baked into an image cannot be zoomed on its own, reflowed, restyled into a reading font, selected, copied, translated, or highlighted. For a game whose audience is Autistic and otherwise neurodivergent people, several of whom will be using exactly those tools, that is a real cost. It is most visible on a phone, where the lettering is small and fixed while everything around it reflows.
 
-So `renderCard()` in `penguin-pebbling.js` draws the card image and then the same words as text underneath, and `alt` now carries the whole prompt rather than a prefix.
+So `renderCard()` in `penguin-pebbling.js` draws the card image and then the same words as text underneath, and `alt` carries the whole prompt rather than a prefix. **It shipped on 2026-09-14 and ran unapproved for a day**, which is the wrong order and worth saying plainly: it was a visible change to Helen's design, made during an import, and the right version of this is that it waits. It is approved now.
 
-**This is a visible change to Helen's design and it is hers to approve.** It is one function. If she would rather the page show the art alone, delete the `card-text` block from `renderCard` and the `.card-text` rules from the stylesheet; the fuller `alt` text should stay either way.
+The follow-on question — whether to stop using the pictures altogether and re-set the whole deck as text — is a different and much larger one, and is the single item still open.
 
-### 2. Whether the deck should be re-set as text rather than pictures
+### The licence is CC BY-NC-SA 4.0
 
-Follows from the above but is much larger. The cards are 1748×1240 PNGs — beautiful, and 28.5 MB for the set. Rendering each card from text and CSS with the penguin illustration as a separate transparent image would give a deck that is a few hundred kilobytes, scales to any screen, and needs no `alt` at all because it would be text.
+**Decided 2026-09-15. This was open item 3, and it was Helen's and Ryan's jointly.**
 
-It would also mean rebuilding Helen's typography in CSS, and the printable PDF deck would still need the PNGs. **Not proposed, only noted.** The WebP derivatives already take the page from 28.5 MB to 1.8 MB, which removes the urgency.
+The game always described its terms in a sentence: *"free to use, share, and adapt for non-commercial purposes, please credit and link back."* Clear enough to read, ambiguous enough to argue about, and with no text to point a court or a cautious institution at.
 
-### 3. The licence is a sentence, not a licence
+**[CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) says that, and is written down.** Adopting it changes nothing about what was already permitted — use, share, adapt, non-commercially, with credit — and answers the one question the sentence left open: **ShareAlike.** An adaptation must now carry the same licence. That is a real addition to the terms, not just a formalisation, and it is the thing to be clear about with anyone who took the old wording as permission to relicense a derivative.
 
-The game says *"free to use, share, and adapt for non-commercial purposes, please credit and link back."* That is clear enough to read and ambiguous enough to argue about — it does not say whether adaptations must carry the same terms, and it has no text to point a court or a cautious institution at.
+Two things it deliberately does not disturb. **The shop is unaffected**: NonCommercial binds the people who receive the work, not the people who made it, so Helen and Ryan go on selling the deck and taking donations exactly as before. And **the code is not separately licensed** — it travels with the game, because the code and the cards ship together here and the cards are not MIT.
 
-**CC BY-NC-SA 4.0 says exactly this and is written down.** Adopting it would cost nothing and would answer the question a school or clinic's legal team asks. But it is a licensing decision about Helen's artwork as much as the code, so it is hers and Ryan's jointly, not something to slip in during an import. Left exactly as the game states it.
-
-----
-
-## Settled during the import
+`LICENSE.md` carries the terms, including the part worth saying out loud: printing the deck for a classroom or a clinic, or making a translation or an AAC version for the people in front of you, is ordinary use. ShareAlike bites on *distributing* an adaptation, not on making one.
 
 ### Sage, from Helen's own cards — and a dark mode
 

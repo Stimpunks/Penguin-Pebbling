@@ -6,19 +6,22 @@ Guidance for Claude Code working in this repository.
 
 **Penguin Pebbling** ([penguinpebbling.app](https://penguinpebbling.app/)) is a neuro-affirming card game by **Helen Edgar** (Autistic Realms) and **Ryan Boren** (Stimpunks), published first at Autistic Realms and given its own site here. Thirty cards across the Five Autistic Love Locutions, playable in the browser or printable as a deck.
 
-Read `README.md` for the layout, `ATTRIBUTIONS.md` for who owns what, and `DECISIONS.md` for what was chosen during the import and what is still open. **`DECISIONS.md` has three open items and all three are Helen's to answer** — the card text under the art, re-setting the deck as text, and the licence (that last one jointly with Ryan). Check it before proposing anything that touches the card presentation or the licence.
+Read `README.md` for the layout, `ATTRIBUTIONS.md` for who owns what, `LICENSE.md` for the terms, and `DECISIONS.md` for what was chosen during the import and what is still open. **`DECISIONS.md` has one open item and it is Helen's**: whether the deck should be re-set as text rather than pictures. It is noted, not proposed. The other two — the card text under the art, and the licence — were decided on 2026-09-15 and are written up under Settled.
 
 ## Two people work here
 
 Helen Edgar and Ryan Boren both have rights to this work. **So *you* is whoever is at the keyboard, and it is never safe to guess.** Ask which one only when the answer changes the work — a byline, an attribution, whose call a design decision is. It usually does not.
 
-**Helen's design decisions are Helen's.** The palette, the card artwork, the type, the wording of the prompts. Propose, do not apply. The one place this was already stretched — rendering the card prompt as text under the art — is written up in `DECISIONS.md` as an open item precisely because it is a visible change to her game.
+**Helen's design decisions are Helen's.** The palette, the card artwork, the type, the wording of the prompts. Propose, do not apply.
+
+The one time that was stretched is worth knowing about. Rendering the card prompt as text under the art shipped on 2026-09-14 and was approved on the 15th — so it ran live and unapproved for a day. It is settled now and the outcome was the right one, which is exactly why it is not a precedent: a visible change to someone else's game waits for them, and the fact that it turned out fine is not the test.
 
 ## House rules
 
 - **Capitalize Autistic and Disabled. Identity-first language** — "Autistic person", never "person with autism". This is not a style preference; it is the community's own usage and the whole site is written in it.
 - **Horizontal rules in Markdown are `----`, four dashes.** YAML fences stay at three.
 - **One line per paragraph in Markdown.** No hard-wrapping prose; let the editor soft-wrap. `DECISIONS.md`, `ATTRIBUTIONS.md` and `CHANGELOG.md` are written this way; parts of `README.md` predate the rule.
+- **The licence is CC BY-NC-SA 4.0**, adopted 2026-09-15. The ShareAlike is the part that is new and easy to get wrong when describing it: an adaptation must carry the same licence. `LICENSE.md` is the source; the site states it on `about.html`, in the footer and in the JSON-LD.
 - **British spelling** in page copy — Helen's, and the published text uses it (*centre*, *recognise*, *journalling*).
 - **Never hand-edit a generated file.** See below — there are three of them now, and each has a tool that will overwrite it.
 
