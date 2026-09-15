@@ -46,7 +46,10 @@
   # local.
   # `img-src` allows data: because nothing uses it today and it costs nothing to
   # keep an inline SVG working if one is ever added.
-  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  # `worker-src` falls back through `child-src` to `default-src`, so
+  # `default-src 'none'` blocks the service worker — our own script, from our own
+  # origin. It is named explicitly rather than loosened anywhere else.
+  Content-Security-Policy: default-src 'none'; script-src 'self'; worker-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 # Card art changes only when Helen redraws a card, but the filenames are stable
 # — `infodumping-1.webp` says nothing about its contents the way a content hash
@@ -92,6 +95,12 @@
   Cache-Control: public, max-age=0, must-revalidate
 
 /theme.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+# The service worker decides what every other request does, so it is the one file
+# that must never be served stale: a held sw.js is a site that cannot be updated.
+# Browsers cap its lifetime at 24 hours regardless; this says nothing is held.
+/sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
 # Generated from penguin-pebbling.js, so it revalidates with it. This is what our

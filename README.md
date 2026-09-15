@@ -47,13 +47,15 @@ tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/make-icons.py     regenerates favicon.ico and icon-maskable.png
 tools/make-card-art.py  cuts cards/art/ out of the print masters
+tools/make-service-worker.py  regenerates sw.js, the offline precache
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/build-changelog.py renders CHANGELOG.md into changelog.html
 tools/make-search-index.py publishes the deck's text for archivers and our mirror
 tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
 tools/make-llms-txt.py  regenerates llms.txt, the curated index for language models
-theme.js                light/dark, set before first paint and remembered
+theme.js                light/dark, set before first paint; also registers sw.js
+sw.js                   generated — offline support, ~630 KB precached
 fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
 netlify.toml _headers _redirects   Netlify configuration
 ```

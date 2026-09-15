@@ -36,6 +36,7 @@ The one time that was stretched is worth knowing about. Rendering the card promp
 | `og-image.png` | drawn from scratch | `tools/make-og-image.py` |
 | `favicon.ico`, `icon-maskable.png` | `apple-touch-icon.png` | `tools/make-icons.py` |
 | `cards/art/` and the `card-art:palette` block in the CSS | `cards/print/` | `tools/make-card-art.py` |
+| `sw.js` | `sitemap.xml` plus globs | `tools/make-service-worker.py` |
 | the nav and footer in every page but `index.html` | the marked blocks in `index.html` | `tools/sync-shell.py` |
 
 Edit the source on the left-hand side, then run the tool. An edit on the right is lost on the next run, silently.
@@ -54,7 +55,7 @@ Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** —
 
 ## The tools
 
-Ten, all Python, all run by hand, none wired into a build. Six take `--check`, which reports drift and writes nothing.
+Eleven, all Python, all run by hand, none wired into a build. Seven take `--check`, which reports drift and writes nothing.
 
 | Tool | What it does | `--check`? |
 |---|---|---|
@@ -68,6 +69,7 @@ Ten, all Python, all run by hand, none wired into a build. Six take `--check`, w
 | `tools/make-og-image.py` | regenerates `og-image.png` | no |
 | `tools/make-icons.py` | regenerates `favicon.ico` and `icon-maskable.png` | no |
 | `tools/make-card-art.py` | cuts the illustrations out of the print masters for the re-set deck | yes |
+| `tools/make-service-worker.py` | regenerates `sw.js`, the offline precache | yes |
 
 `make-images.py`, `make-og-image.py`, `make-icons.py` and `make-card-art.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
 
@@ -75,7 +77,7 @@ Ten, all Python, all run by hand, none wired into a build. Six take `--check`, w
 
 ## Verifying a change
 
-There is no test suite. There are seven checks, and they are fast — run them all before calling anything done:
+There is no test suite. There are eight checks, and they are fast — run them all before calling anything done:
 
 ```bash
 python3 tools/sync-shell.py --check
@@ -84,6 +86,7 @@ python3 tools/build-changelog.py --check
 python3 tools/make-search-index.py --check
 python3 tools/make-llms-txt.py --check
 python3 tools/make-card-art.py --check
+python3 tools/make-service-worker.py --check
 python3 tools/set-domain.py --check
 ```
 
@@ -96,6 +99,14 @@ npx -y serve . -l 8913 --no-clipboard
 `python3 -m http.server 8913` also works here and serves every asset type the page uses with the right content type — verified 2026-09-14. Neither server is a dependency of the site; nothing is installed into the repository and `npx serve` is a dev-time convenience only.
 
 Check the console is clean, draw a few cards, exercise the locution filters, toggle dark mode, and look at it at 375px wide. The card art is fixed-width lettering; the text beneath it is what has to reflow.
+
+## The service worker
+
+**It is network-first for documents, CSS and JS, and that is not the usual advice.** `_headers` revalidates those on every request because a stale stylesheet against fresh markup renders the page wrong — commit `15bc1bd` exists because that happened. A cache-first worker makes that permanent rather than day-long. Fonts, card art and icons are cache-first; their bytes only change when a generator runs, and the cache name is a hash of them.
+
+**The precache holds both URL forms of every page** — `/how-to-play` *and* `/how-to-play.html`. Netlify's Pretty URLs rewrites the markup so production navigates to the first; nothing rewrites locally, so a dev server navigates to the second. Caching one form looks completely fine — the worker installs and reports every URL held — and then the first offline navigation asks for the address nobody cached.
+
+**Once a worker is shipped it lives on people's devices until something unregisters it.** Removing offline support later is not deleting `sw.js`; it is publishing a worker whose only job is to unregister itself. Worth knowing before changing its shape.
 
 ## Deploying, and why the live page never matches the repo
 

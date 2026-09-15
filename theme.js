@@ -62,4 +62,21 @@
       });
     }
   });
+
+  /* The service worker, registered from here because this is the only script on
+   * all seven pages — penguin-pebbling.js is the game and lives on one of them.
+   *
+   * On `load` rather than immediately: this file runs from <head> without defer
+   * so the theme lands before the first paint, and registering a worker in that
+   * window would compete with the thing it is there to protect. Nothing about
+   * the site needs the worker to be early.
+   *
+   * Over file:// there is no service worker and no error worth showing. */
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("/sw.js").catch(function () {
+        /* Offline support is an enhancement; the site works without it. */
+      });
+    });
+  }
 })();

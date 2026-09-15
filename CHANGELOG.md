@@ -6,6 +6,10 @@ Each dated entry is split into **Game** and **Site**. An entry only carries the 
 
 ## 2026-09-15
 
+### Site
+
+- **The game works with no connection, and can be installed like an app.** Once you have opened the site, the cards, the rules, the five locutions and every page are kept on your device — so a group can play in a room with no signal, which is where a lot of them are. Add it to your home screen and it opens like an app. The printable PDFs are large, so they are kept once you have opened them rather than downloaded in advance. Nothing about this sends anything anywhere; see [privacy](https://penguinpebbling.app/privacy).
+
 ### Game
 
 - **The cards are set in real text now.** Every prompt used to be lettered into a picture, which is right on printed card stock and costly on a screen: the words could not be made bigger on their own, could not re-wrap, could not be read in your own font, selected, copied, translated or handed to a highlighter, and on a phone they stayed small while everything around them adapted. The words are words now, set in the same typeface as the rest of the site — so they fill the screen you are reading on, at whatever size you have asked for. Helen's drawings are still her drawings, and the printable deck is unchanged. **On a wide screen the card is wider than the rest of the page**, so the prompt has a comfortable line length rather than a narrow ribbon of words; on anything smaller it stacks and uses the full width instead. **The card follows dark mode now as well** — it used to stay bright cream whatever you had chosen, which on a dark page is a glare line at every edge.
