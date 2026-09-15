@@ -8,6 +8,7 @@ Each dated entry is split into **Game** and **Site**. An entry only carries the 
 
 ### Site
 
+- **A shared link now previews the card you will actually see.** The picture that shows up when someone posts the link was one of the printed cards; since the cards were re-set as text it was showing a game that no longer looked like this one. It is drawn from the real thing now, prompt and all.
 - **The game works with no connection, and can be installed like an app.** Once you have opened the site, the cards, the rules, the five locutions and every page are kept on your device — so a group can play in a room with no signal, which is where a lot of them are. Add it to your home screen and it opens like an app. The printable PDFs are large, so they are kept once you have opened them rather than downloaded in advance. Nothing about this sends anything anywhere; see [privacy](https://penguinpebbling.app/privacy).
 
 ### Game

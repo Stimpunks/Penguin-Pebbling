@@ -38,13 +38,13 @@ cards/art/              the re-set deck's artwork — 1 pebble stack, 5 illustra
 cards/                  35 WebP derivatives; only the 5 locution cards are still shown
 cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
-og-image.png            1200x630 share card, for links unfurled on social
+og-image.png            generated — 1200x630 share card, drawn as the card the site draws
 favicon.ico             generated — the fallback for anything that wants an .ico
 icon-maskable.png       generated — the Android home-screen icon, safe-zone padded
 search-index.json       generated from penguin-pebbling.js — the deck's text, for our mirror
 llms.txt                generated from the pages — a short map of the site for LLMs
 tools/make-images.py    regenerates cards/ from cards/print/
-tools/make-og-image.py  regenerates og-image.png
+tools/make-og-image.py  redraws og-image.png as one of the re-set cards
 tools/make-icons.py     regenerates favicon.ico and icon-maskable.png
 tools/make-card-art.py  cuts cards/art/ out of the print masters
 tools/make-service-worker.py  regenerates sw.js, the offline precache

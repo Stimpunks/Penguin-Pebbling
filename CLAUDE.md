@@ -33,7 +33,7 @@ The one time that was stretched is worth knowing about. Rendering the card promp
 | `changelog.html` | `CHANGELOG.md` | `tools/build-changelog.py` |
 | `search-index.json` | `penguin-pebbling.js` | `tools/make-search-index.py` |
 | `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
-| `og-image.png` | drawn from scratch | `tools/make-og-image.py` |
+| `og-image.png` | the deck, the card palette, `favicon.svg`, `cards/art/`, the woff2 | `tools/make-og-image.py` |
 | `favicon.ico`, `icon-maskable.png` | `apple-touch-icon.png` | `tools/make-icons.py` |
 | `cards/art/` and the `card-art:palette` block in the CSS | `cards/print/` | `tools/make-card-art.py` |
 | `sw.js` | `sitemap.xml` plus globs | `tools/make-service-worker.py` |
@@ -55,7 +55,7 @@ Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** —
 
 ## The tools
 
-Eleven, all Python, all run by hand, none wired into a build. Seven take `--check`, which reports drift and writes nothing.
+Eleven, all Python, all run by hand, none wired into a build. Eight take `--check`, which reports drift and writes nothing.
 
 | Tool | What it does | `--check`? |
 |---|---|---|
@@ -66,18 +66,18 @@ Eleven, all Python, all run by hand, none wired into a build. Seven take `--chec
 | `tools/set-domain.py` | rewrites the site's own address everywhere at once | yes |
 | `tools/make-llms-txt.py` | regenerates `llms.txt`, the curated index for language models | yes |
 | `tools/make-images.py` | regenerates `cards/` from `cards/print/` | no |
-| `tools/make-og-image.py` | regenerates `og-image.png` | no |
+| `tools/make-og-image.py` | redraws `og-image.png` as the card the site draws | yes |
 | `tools/make-icons.py` | regenerates `favicon.ico` and `icon-maskable.png` | no |
 | `tools/make-card-art.py` | cuts the illustrations out of the print masters for the re-set deck | yes |
 | `tools/make-service-worker.py` | regenerates `sw.js`, the offline precache | yes |
 
-`make-images.py`, `make-og-image.py`, `make-icons.py` and `make-card-art.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
+`make-images.py`, `make-og-image.py`, `make-icons.py` and `make-card-art.py` need Pillow, and `make-og-image.py` also needs fontTools and brotli — it renders the page's own woff2, which Pillow cannot read; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
 
 `build-changelog.py` understands a deliberately small Markdown dialect and treats anything else as a **hard error rather than a silent drop**. That is on purpose: a changelog that quietly loses an entry still looks fine.
 
 ## Verifying a change
 
-There is no test suite. There are eight checks, and they are fast — run them all before calling anything done:
+There is no test suite. There are nine checks, and they are fast — run them all before calling anything done:
 
 ```bash
 python3 tools/sync-shell.py --check
@@ -86,6 +86,7 @@ python3 tools/build-changelog.py --check
 python3 tools/make-search-index.py --check
 python3 tools/make-llms-txt.py --check
 python3 tools/make-card-art.py --check
+python3 tools/make-og-image.py --check
 python3 tools/make-service-worker.py --check
 python3 tools/set-domain.py --check
 ```
