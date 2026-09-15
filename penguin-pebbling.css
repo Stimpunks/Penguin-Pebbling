@@ -107,7 +107,10 @@ hr.rule {
   background: var(--paper-warm); border-radius: 12px; border: 1px solid var(--line);
 }
 .penguin-glyph { font-size: 40px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
-.game-title { font-size: 21px; font-weight: 600; color: var(--ink-strong); margin-bottom: 2px; }
+/* The game's <h2> sits inside .prose, so it would otherwise inherit the 2rem
+ * top margin meant for article headings. Stated here rather than as a style
+ * attribute — the CSP is style-src 'self' and an inline style is blocked. */
+.game-header .game-title { font-size: 21px; font-weight: 600; color: var(--ink-strong); margin: 0 0 2px; }
 .game-tagline { font-size: 13px; color: var(--ink-soft); font-style: italic; margin-bottom: 6px; }
 .game-intro { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
 

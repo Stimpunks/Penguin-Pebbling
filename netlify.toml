@@ -1,0 +1,16 @@
+# Netlify configuration.
+#
+# Kept in the repository rather than only in the dashboard so the deploy setup is
+# reviewable in a diff like everything else. There is no build step: the site is
+# HTML, one stylesheet, one script and a folder of pictures, so Netlify publishes
+# the repository root as-is.
+#
+# Response headers and redirects live in `_headers` and `_redirects` next to this
+# file, where they were already written, rather than being restated here.
+
+[build]
+  publish = "."
+  command = ""
+
+[build.processing]
+  skip_processing = true
