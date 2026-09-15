@@ -49,6 +49,36 @@
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
+/* card-art:palette — written by tools/make-card-art.py */
+:root {
+  --card-cream: #f4e7cf;
+  --card-tint-infodumping: #bba3b7;
+  --card-tint-parallel-play: #ddbbba;
+  --card-tint-support-swapping: #c3beaf;
+  --card-tint-penguin-pebbling: #e8e1ce;
+  --card-tint-deep-pressure: #aac5c0;
+}
+/* /card-art:palette */
+
+/* The two inks the re-set deck is drawn in.
+ *
+ * Helen letters her cards in #b28a5e, a warm light brown on the cream. Baked
+ * into a picture, nothing measured it. As real text it is a text/background pair
+ * this site is answerable for, and it is 2.57:1 — far under the 4.5:1 AA asks
+ * for, on a page whose whole argument is accessibility. So the ink keeps her
+ * hue (31.4 degrees) and her saturation (35.3%) exactly, and only the lightness
+ * moves.
+ *
+ * Two of them, because they sit on different grounds. The prompt is on the cream
+ * and gets 6.0:1. The heading and credit on the right sit on whichever locution
+ * tint the card carries, and the palest of those, Infodumping's mauve, is the
+ * one that decides: this value clears 5:1 on all five. tools/check-contrast.py
+ * measures every one of these pairs. */
+:root {
+  --card-ink: #6c5133;
+  --card-ink-panel: #473522;
+}
+
 :root {
   color-scheme: light dark;
 
@@ -617,6 +647,81 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   .filter-row { gap: 6px; }
   .fbtn { padding: 6px 12px; }
   .card-footer { padding-left: 1.15rem; padding-right: 1.15rem; }
+}
+
+/* ── The prompt card, re-set as text ────────────────────────────────────────
+ * Helen's cards are 1748x1240 pictures with the words lettered into them. The
+ * words are text here and only the drawings are pictures: one pebble stack and
+ * one illustration per locution, cut out by tools/make-card-art.py.
+ *
+ * Deliberately NOT a fixed aspect ratio. Reflowing is the entire point — a
+ * prompt that grows at 400% zoom has to be allowed to make the card taller
+ * rather than overflow it, and the original could not do that at all. */
+.pcard {
+  display: grid;
+  grid-template-columns: 1.02fr 1fr;   /* Helen's split is 50.6 / 49.4 */
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card-cream);
+  text-align: center;
+}
+
+.pcard-text {
+  padding: 1.5rem 1.35rem 1.25rem;
+  display: flex; flex-direction: column; align-items: center;
+  color: var(--card-ink);
+}
+.pcard-pebbles { width: 100px; height: 110px; margin-bottom: 0.75rem; }
+
+.pcard-locution {
+  font-size: var(--text-lg); font-weight: 800;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  line-height: 1.25; margin-bottom: 1rem;
+}
+.pcard-prompt {
+  font-size: var(--text-md); line-height: 1.5;
+  margin-bottom: 1.25rem;
+}
+.pcard-prompt p + p { margin-top: 0.75rem; }
+.pcard-aside {
+  font-size: var(--text-xs); font-style: italic; line-height: 1.5;
+  margin-top: auto; padding-top: 0.75rem;
+}
+
+.pcard-art {
+  padding: 1.25rem 1rem;
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  color: var(--card-ink-panel);
+}
+/* auto margins top and bottom: the illustration takes an equal share of the
+ * free space on each side, so it sits centred between the heading and the
+ * credit however long the prompt opposite makes the card. Pushing the credit
+ * down with margin-top instead left the drawing riding high against the
+ * heading. */
+.pcard-art img { width: 100%; max-width: 230px; height: auto; margin-block: auto; }
+.pcard-title, .pcard-credit { font-size: var(--text-xs); line-height: 1.35; }
+
+.pcard[data-locution="infodumping"] .pcard-art      { background: var(--card-tint-infodumping); }
+.pcard[data-locution="parallel-play"] .pcard-art    { background: var(--card-tint-parallel-play); }
+.pcard[data-locution="support-swapping"] .pcard-art { background: var(--card-tint-support-swapping); }
+.pcard[data-locution="penguin-pebbling"] .pcard-art { background: var(--card-tint-penguin-pebbling); }
+.pcard[data-locution="deep-pressure"] .pcard-art    { background: var(--card-tint-deep-pressure); }
+
+/* One column on a narrow screen. The drawing goes under the words: on a phone
+ * the prompt is what you came for, and it should not start below a picture. */
+@media (max-width: 560px) {
+  .pcard { grid-template-columns: 1fr; }
+  .pcard-art { padding: 1rem; flex-direction: column; }
+  .pcard-art img { max-width: 180px; }
+  .pcard-aside { margin-top: 1rem; }
+}
+
+/* Forced colours flatten both panel fills to one ground, which would leave the
+ * two halves of the card indistinguishable. A border is honoured, so the seam
+ * survives as a line. */
+@media (forced-colors: active) {
+  .pcard { border: 1px solid; }
+  .pcard-art { border-top: 1px solid; }
 }
 
 @media (prefers-reduced-motion: reduce) {

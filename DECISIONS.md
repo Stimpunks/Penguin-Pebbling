@@ -2,19 +2,33 @@
 
 What was chosen during the import, why, and what is still open. Newest at the top of each section.
 
+**Nothing is open.** The three items that needed Helen were all decided on 2026-09-15 and are written up below.
+
 ----
-
-## Open — this needs Helen
-
-### 1. Whether the deck should be re-set as text rather than pictures
-
-Follows from the card text being approved, but is much larger. The cards are 1748×1240 PNGs — beautiful, and 28.5 MB for the set. Rendering each card from text and CSS with the penguin illustration as a separate transparent image would give a deck that is a few hundred kilobytes, scales to any screen, and needs no `alt` at all because it would be text.
-
-It would also mean rebuilding Helen's typography in CSS, and the printable PDF deck would still need the PNGs. **Not proposed, only noted.** The WebP derivatives already take the page from 28.5 MB to 1.8 MB, which removes the urgency.
 
 ----
 
 ## Settled during the import
+
+### The deck is re-set as text
+
+**Decided 2026-09-15. This was the last open item, and it was Helen's.** Done.
+
+The prompts, the locution names and the aside are real text in the page now, set in Atkinson Hyperlegible Next. Only the drawings are still pictures.
+
+**Ryan's call on the typeface, and it is the one that made this cheap.** The original plan assumed rebuilding Helen's serif in CSS, which meant identifying it, self-hosting it, and editing the CSP to let a second face in. Atkinson Hyperlegible Next is already here, already self-hosted, already the typeface the rest of the site is set in, and is drawn by the Braille Institute for exactly this audience. *"Since we made the game, we've standardised on Atkinson HN."*
+
+**The saving that made the rest cheap is that Helen's artwork does not vary per card.** All six Infodumping cards carry the same penguin and the same cream ellipse; only the words differ. So thirty pictures reduce to six — one pebble stack, which is on every card in the deck, and one illustration per locution — cut out by `tools/make-card-art.py`, which detects the panel split, the ellipse and the pebbles rather than cropping at hard-coded coordinates.
+
+The card's imagery goes from 1.5 MB across thirty files, one fetched per draw, to 152 KB across six, cached after the first. But weight was never the reason, and `DECISIONS.md` said so when this was still open: the WebP derivatives had already removed the urgency.
+
+**The reason is that it reflows.** A prompt in a 1280px picture is a 1280px picture: at 400% zoom it does not re-wrap, on a phone the lettering stays small while everything around it adapts, and it cannot be re-set in a reading font. As text it fills a phone's width, re-wraps at any zoom, and the card grows taller instead of overflowing. That is why the layout is deliberately *not* a fixed aspect ratio, which would have fought the whole point.
+
+**The one thing that had to change is the ink, and it is worth being plain about.** Helen letters her cards in `#b28a5e` on her cream. Baked into a picture nothing measured it; as real text it is a pair this site is answerable for, and it is **2.57:1** against the 4.5:1 AA asks for. The ink keeps her hue (31.4°) and her saturation (35.3%) exactly and only moves in lightness: `#6c5133` on the cream at 6.0:1, and `#473522` for the small text on the locution tints, which clears 5:1 on all five including the palest. `tools/check-contrast.py` measures all eight of those pairs now, so they cannot drift back.
+
+**The alt text is gone, and that is the correct outcome.** The prompt used to be carried in `alt` because the picture was the only copy. The illustrations are decorative now — the locution is named in text beside them — so an empty `alt` is right, and a screen reader reaches the prompt as prose rather than as a description of a picture.
+
+The print masters in `cards/print/` are untouched and the printable PDF deck still comes from them. The thirty prompt-card WebP derivatives are no longer used by anything.
 
 ### The card text under the card art was approved
 

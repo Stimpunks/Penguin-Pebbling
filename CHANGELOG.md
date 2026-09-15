@@ -8,6 +8,7 @@ Each dated entry is split into **Game** and **Site**. An entry only carries the 
 
 ### Game
 
+- **The cards are set in real text now.** Every prompt used to be lettered into a picture, which is right on printed card stock and costly on a screen: the words could not be made bigger on their own, could not re-wrap, could not be read in your own font, selected, copied, translated or handed to a highlighter, and on a phone they stayed small while everything around them adapted. The words are words now, set in the same typeface as the rest of the site — so they fill the screen you are reading on, at whatever size you have asked for. Helen's drawings are still her drawings, and the printable deck is unchanged.
 - **The prompt printed under each card is here to stay.** It went in during the move to this site so the words could be zoomed, reflowed, read in your own font, selected, copied, translated or read aloud — none of which lettering inside a picture allows. Helen has approved it, so it stays.
 
 ### Site

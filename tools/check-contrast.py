@@ -50,7 +50,11 @@ def tokens_in(block):
 def themes():
     text = CSS.read_text(encoding="utf-8")
 
-    light_start = text.index(":root {")
+    # Anchor on the palette's own first declaration, not on the first ":root {"
+    # in the file. The card art palette and the card inks are in :root blocks of
+    # their own above this one, and "the first :root" quietly became the wrong
+    # one the moment they were added.
+    light_start = text.index(":root {\n  color-scheme: light dark;")
     light = tokens_in(text[light_start:text.index("\n}", light_start)])
 
     # The toggle's block is the authority for dark; the prefers-color-scheme block
@@ -92,6 +96,43 @@ def pairs(t):
     return out
 
 
+CARD_LOCS = ["infodumping", "parallel-play", "support-swapping",
+             "penguin-pebbling", "deep-pressure"]
+
+
+def card_tokens():
+    """The re-set deck's own colours, which do not vary by theme.
+
+    The card is Helen's artwork and stays bright in dark mode — dimming it would
+    misrepresent the work — so these are one set of pairs, not two.
+    """
+    text = CSS.read_text(encoding="utf-8")
+    start = text.index("/* card-art:palette")
+    block = text[start:text.index("/* /card-art:palette */")]
+    t = tokens_in(block)
+    ink_start = text.index(":root {\n  --card-ink:")
+    t.update(tokens_in(text[ink_start:text.index("\n}", ink_start)]))
+    return t
+
+
+def card_pairs(t):
+    """Every text/background pair on the re-set card.
+
+    These did not exist while the prompt was lettered into a picture, and that is
+    the point: nothing measured Helen's #b28a5e on her cream, which is 2.57:1. As
+    real text it is this site's responsibility, so it is measured here.
+    """
+    cream = t["--card-cream"]
+    out = [
+        ("prompt on card cream",   t["--card-ink"], cream, False),
+        ("locution name on cream", t["--card-ink"], cream, True),
+        ("aside on card cream",    t["--card-ink"], cream, False),
+    ]
+    for k in CARD_LOCS:
+        out.append((f"panel text on {k}", t["--card-ink-panel"], t[f"--card-tint-{k}"], False))
+    return out
+
+
 def check(name, t):
     print(f"\n── {name} " + "─" * (56 - len(name)))
     bad = 0
@@ -114,6 +155,16 @@ def main():
 
     bad = check("LIGHT", light) + check("DARK", dark)
 
+    # The re-set card is one set of colours in both themes, so it is checked once.
+    ct = card_tokens()
+    print("\n── CARD (both themes) " + "─" * 35)
+    for label, fg, bg, large in card_pairs(ct):
+        r = ratio(fg, bg)
+        need = 3.0 if large else 4.5
+        ok = r >= need
+        bad += not ok
+        print(f"  {label:28} {r:6.2f}:1  need {need:>4}   {'PASS' if ok else 'FAIL'}")
+
     print()
     if drift:
         print(f"MISMATCH: the data-theme block and the prefers-color-scheme block "
@@ -126,7 +177,7 @@ def main():
     if bad:
         print(f"\n{bad} problem(s).")
         return 1
-    print("Both themes meet WCAG 2.1 AA, and the two dark blocks agree.")
+    print("Both themes and the card meet WCAG 2.1 AA, and the two dark blocks agree.")
     return 0
 
 

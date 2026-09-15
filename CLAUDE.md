@@ -6,7 +6,7 @@ Guidance for Claude Code working in this repository.
 
 **Penguin Pebbling** ([penguinpebbling.app](https://penguinpebbling.app/)) is a neuro-affirming card game by **Helen Edgar** (Autistic Realms) and **Ryan Boren** (Stimpunks), published first at Autistic Realms and given its own site here. Thirty cards across the Five Autistic Love Locutions, playable in the browser or printable as a deck.
 
-Read `README.md` for the layout, `ATTRIBUTIONS.md` for who owns what, `LICENSE.md` for the terms, and `DECISIONS.md` for what was chosen during the import and what is still open. **`DECISIONS.md` has one open item and it is Helen's**: whether the deck should be re-set as text rather than pictures. It is noted, not proposed. The other two — the card text under the art, and the licence — were decided on 2026-09-15 and are written up under Settled.
+Read `README.md` for the layout, `ATTRIBUTIONS.md` for who owns what, `LICENSE.md` for the terms, and `DECISIONS.md` for what was chosen during the import and what is still open. **`DECISIONS.md` has no open items.** All three that needed Helen — the card text under the art, the deck being re-set as text, and the licence — were decided on 2026-09-15 and are written up under Settled. Read them before reopening any of it.
 
 ## Two people work here
 
@@ -35,6 +35,7 @@ The one time that was stretched is worth knowing about. Rendering the card promp
 | `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
 | `og-image.png` | drawn from scratch | `tools/make-og-image.py` |
 | `favicon.ico`, `icon-maskable.png` | `apple-touch-icon.png` | `tools/make-icons.py` |
+| `cards/art/` and the `card-art:palette` block in the CSS | `cards/print/` | `tools/make-card-art.py` |
 | the nav and footer in every page but `index.html` | the marked blocks in `index.html` | `tools/sync-shell.py` |
 
 Edit the source on the left-hand side, then run the tool. An edit on the right is lost on the next run, silently.
@@ -53,7 +54,7 @@ Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** —
 
 ## The tools
 
-Nine, all Python, all run by hand, none wired into a build. Five take `--check`, which reports drift and writes nothing.
+Ten, all Python, all run by hand, none wired into a build. Six take `--check`, which reports drift and writes nothing.
 
 | Tool | What it does | `--check`? |
 |---|---|---|
@@ -66,14 +67,15 @@ Nine, all Python, all run by hand, none wired into a build. Five take `--check`,
 | `tools/make-images.py` | regenerates `cards/` from `cards/print/` | no |
 | `tools/make-og-image.py` | regenerates `og-image.png` | no |
 | `tools/make-icons.py` | regenerates `favicon.ico` and `icon-maskable.png` | no |
+| `tools/make-card-art.py` | cuts the illustrations out of the print masters for the re-set deck | yes |
 
-`make-images.py`, `make-og-image.py` and `make-icons.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
+`make-images.py`, `make-og-image.py`, `make-icons.py` and `make-card-art.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
 
 `build-changelog.py` understands a deliberately small Markdown dialect and treats anything else as a **hard error rather than a silent drop**. That is on purpose: a changelog that quietly loses an entry still looks fine.
 
 ## Verifying a change
 
-There is no test suite. There are six checks, and they are fast — run them all before calling anything done:
+There is no test suite. There are seven checks, and they are fast — run them all before calling anything done:
 
 ```bash
 python3 tools/sync-shell.py --check
@@ -81,6 +83,7 @@ python3 tools/check-contrast.py
 python3 tools/build-changelog.py --check
 python3 tools/make-search-index.py --check
 python3 tools/make-llms-txt.py --check
+python3 tools/make-card-art.py --check
 python3 tools/set-domain.py --check
 ```
 
@@ -110,9 +113,13 @@ No npm, no bundler, no framework, no CDN, no analytics, nothing fetched from a t
 
 The audience is Autistic and otherwise neurodivergent people, many using screen readers, zoom, reading fonts, AAC, or translation. Anything that makes the page harder to operate is a defect in the game, not a cosmetic issue.
 
-Already in place and worth not regressing: full prompt text in every `alt` (not a prefix), a skip link, real `<button>`s with `aria-pressed`, `aria-live` on the card area, visible focus rings, `prefers-reduced-motion`, a `forced-colors` block that repairs the one state Windows High Contrast flattens (the active locution filter), `scroll-padding-top` so a sticky bar never covers what an anchor jumped to, `width`/`height` on every image, a type scale in `rem` so the reader's own browser text size is honoured, and a dark mode that follows the system in CSS alone so it works with JavaScript off.
+Already in place and worth not regressing: a skip link, real `<button>`s with `aria-pressed`, `aria-live` on the card area, visible focus rings, `prefers-reduced-motion`, a `forced-colors` block that repairs the one state Windows High Contrast flattens (the active locution filter), `scroll-padding-top` so a sticky bar never covers what an anchor jumped to, `width`/`height` on every image, a type scale in `rem` so the reader's own browser text size is honoured, and a dark mode that follows the system in CSS alone so it works with JavaScript off.
 
-**The prompts are lettered into the card artwork.** That is the standing accessibility problem here and the reason the text is also rendered beneath. Do not "simplify" by removing it without reading `DECISIONS.md` first.
+**The deck is text now, not pictures.** The prompt, the locution name and the aside are real text set in Atkinson Hyperlegible Next; only the drawings are images, and they are decorative with an empty `alt` because the locution is named in text beside them. `renderCard()` builds the card — it does not fetch one.
+
+**That means the card's colours are this site's responsibility.** Helen letters her cards in `#b28a5e` on cream, which is 2.57:1 and was never measured while it was inside a picture. The ink keeps her hue and saturation and moves only in lightness; `tools/check-contrast.py` measures all eight card pairs. **Do not "restore fidelity" by putting her original ink back** — read the entry in `DECISIONS.md` first.
+
+**The card deliberately has no fixed aspect ratio.** Reflowing is the whole reason the deck was re-set: the prompt has to be allowed to make the card taller at 400% zoom rather than overflow it. A rule that pins the card to 1.41:1 undoes the change.
 
 **Contrast is measured, not eyeballed.** `tools/check-contrast.py` covers both themes and also checks that the `data-theme` and `prefers-color-scheme` blocks have not drifted apart — two copies of one palette being the obvious way this breaks later. Low stimulation here is about surfaces, not text: muting the text too would hurt exactly the readers this is for.
 

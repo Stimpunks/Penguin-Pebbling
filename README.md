@@ -34,7 +34,8 @@ changelog.html          generated from CHANGELOG.md — never edit it directly
 privacy.html            what the site does with your data, which is nothing
 penguin-pebbling.css    Helen's palette and type, extended to cover the page
 penguin-pebbling.js     the thirty cards and the game logic
-cards/                  35 WebP images the page shows (1280px, ~50 KB each)
+cards/art/              the re-set deck's artwork — 1 pebble stack, 5 illustrations
+cards/                  35 WebP derivatives; only the 5 locution cards are still shown
 cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
 og-image.png            1200x630 share card, for links unfurled on social
@@ -45,6 +46,7 @@ llms.txt                generated from the pages — a short map of the site for
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/make-icons.py     regenerates favicon.ico and icon-maskable.png
+tools/make-card-art.py  cuts cards/art/ out of the print masters
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/build-changelog.py renders CHANGELOG.md into changelog.html
@@ -209,16 +211,22 @@ python3 tools/check-contrast.py
 This is a game about belonging, made for Autistic and otherwise neurodivergent people. The
 accessibility of the page is part of the work, not a finishing pass.
 
-**The card prompts are lettered into the card artwork.** That is how Helen designed the deck and
-it is right for print — but on the web it means the words cannot be zoomed independently,
-reflowed, restyled into a reading font, selected, copied, translated, or handed to a
-highlighter. On a phone the lettering is small and fixed.
+**The prompts used to be lettered into the card artwork.** That is how Helen designed the deck and
+it is right for print — but on the web it meant the words could not be zoomed independently,
+reflowed, restyled into a reading font, selected, copied, translated, or handed to a highlighter.
+On a phone the lettering stayed small and fixed while everything around it adapted.
 
-So the page shows **the card, and the same words as text beneath it**. The text is the
-authoritative copy: it is what a screen reader gets in the `alt`, what reflows at 400% zoom, and
-what a reader can select. *This is the one deliberate departure from the published page* — see
-`DECISIONS.md`. It is a handful of lines in `penguin-pebbling.js` (`renderCard`) if it is ever
-decided against.
+**The deck is re-set as text now**, approved by Helen on 2026-09-15 and set in Atkinson
+Hyperlegible Next. `renderCard()` builds the card rather than fetching a picture of one: the
+prompt, the locution name and the aside are text, and only the drawings are images — one pebble
+stack and one illustration per locution, because Helen's artwork does not vary between the six
+cards of a locution. They are decorative and carry an empty `alt`, which is correct now that the
+locution is named in text beside them.
+
+The card has **no fixed aspect ratio**, deliberately. Reflowing is the point: at 400% zoom the
+prompt re-wraps and the card grows taller instead of overflowing, and on a phone the two panels
+stack. See `DECISIONS.md`, including why the ink is a darker version of Helen's — her `#b28a5e`
+on cream is 2.57:1, which nothing measured while it was inside a picture.
 
 Also here, and all of it uncontroversial: a skip link, real `<button>` elements with
 `aria-pressed` on the filters, `aria-live` on the card area so a drawn card is announced, full

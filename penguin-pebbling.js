@@ -78,16 +78,11 @@ function refillDeck() {
   deck = shuffled(filter === "all" ? DECK : DECK.filter((c) => c.locution === filter));
 }
 
-function cardAlt(card) {
-  /* The prompt is lettered into the card art, so for anyone not reading the
-   * picture the alt text IS the card. Give the whole prompt, not a prefix. */
-  const parts = [
-    card.name + " card from the Penguin Pebbling game.",
-    "Prompt: " + card.prompt.replace(/\n/g, " "),
-  ];
-  if (card.aside) parts.push("Also: " + card.aside.replace(/\n/g, " "));
-  parts.push("Autistic Realms & Stimpunks, 2026.");
-  return parts.join(" ");
+/* The slug the artwork is filed under: "parallel-play-3" -> "parallel-play".
+ * One illustration serves all six cards of a locution, because Helen drew it
+ * that way — see tools/make-card-art.py. */
+function locutionSlug(card) {
+  return card.image.replace(/-\d+$/, "");
 }
 
 function el(tag, className, text) {
@@ -101,36 +96,64 @@ function renderCard(card) {
   const area = document.getElementById("card-area");
   area.replaceChildren();
 
-  const wrap = el("div", "card-image-wrap");
-  const img = document.createElement("img");
-  img.src = "cards/" + card.image + ".webp";
-  img.alt = cardAlt(card);
-  img.width = 1280;
-  img.height = 908;
-  img.decoding = "async";
-  wrap.append(img);
+  /* The card is built, not fetched. Helen letters her prompts into the artwork,
+   * which is right for print and costs a screen reader, a translator, a
+   * highlighter, a reading font and anyone at 400% zoom everything. Here the
+   * words are words and only the drawings are pictures.
+   *
+   * Both images are decorative: the locution is named in text beside them and
+   * the prompt is the prompt, so an empty alt is correct rather than lazy —
+   * describing the penguin would make a screen reader read furniture before
+   * content. */
+  const slug = locutionSlug(card);
+  const pcard = el("div", "pcard");
+  pcard.dataset.locution = slug;
 
-  /* The same words as text, under the picture. Zoom, reflow, a reading font, a
-   * highlighter, translation and copy-paste all work on this copy and none of
-   * them work on the lettering in the image. */
-  const text = el("div", "card-text");
-  const locution = el("div", "card-locution", card.name);
-  const prompt = el("div", "card-prompt");
-  card.prompt.split("\n").forEach((line, i) => {
-    if (i) prompt.append(document.createElement("br"));
-    prompt.append(document.createTextNode(line));
-  });
-  text.append(locution, prompt);
-  if (card.aside) {
-    const aside = el("div", "card-sub");
-    card.aside.split("\n").forEach((line, i) => {
-      if (i) aside.append(document.createElement("br"));
-      aside.append(document.createTextNode(line));
+  const left = el("div", "pcard-text");
+  const pebbles = document.createElement("img");
+  pebbles.src = "cards/art/pebbles.webp";
+  pebbles.alt = "";
+  pebbles.width = 200;
+  pebbles.height = 220;
+  pebbles.decoding = "async";
+  pebbles.className = "pcard-pebbles";
+
+  const locution = el("div", "pcard-locution", card.name);
+  const prompt = el("div", "pcard-prompt");
+  /* A blank line in a prompt is a paragraph break, a single one is a line break.
+   * Helen set them that way on the cards and the rhythm is part of the prompt. */
+  card.prompt.split("\n\n").forEach((para) => {
+    const p = document.createElement("p");
+    para.split("\n").forEach((line, i) => {
+      if (i) p.append(document.createElement("br"));
+      p.append(document.createTextNode(line));
     });
-    text.append(aside);
-  }
+    prompt.append(p);
+  });
+  left.append(pebbles, locution, prompt);
 
-  area.append(wrap, text, el("div", "card-footer", FOOTER));
+  if (card.aside) {
+    const extra = el("div", "pcard-prompt");
+    const p = document.createElement("p");
+    p.textContent = card.aside.replace(/\n/g, " ");
+    extra.append(p);
+    left.append(extra);
+  }
+  left.append(el("div", "pcard-aside", FOOTER));
+
+  const right = el("div", "pcard-art");
+  right.append(el("div", "pcard-title", "Penguin Pebbling Game"));
+  const art = document.createElement("img");
+  art.src = "cards/art/" + slug + ".webp";
+  art.alt = "";
+  art.width = 560;
+  art.height = 770;
+  art.decoding = "async";
+  right.append(art);
+  right.append(el("div", "pcard-credit", "Autistic Realms & Stimpunks \u00a9 2026"));
+
+  pcard.append(left, right);
+  area.append(pcard);
 }
 
 function clearCard() {
