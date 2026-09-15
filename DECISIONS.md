@@ -34,6 +34,34 @@ The game says *"free to use, share, and adapt for non-commercial purposes, pleas
 
 ## Settled during the import
 
+### Atkinson Hyperlegible Next, at sizes chosen for this page
+
+Ryan's call, 2026-09-14. The widget was typed in the system UI font at 11–15px, which is what an
+embed inside a blog post gets away with and not what a page about Autistic identity should ship.
+
+**The typeface is an accessibility choice, not a styling one.** Atkinson Hyperlegible Next is
+drawn by the Braille Institute to separate the characters most often confused — capital I,
+lowercase l and the digit 1; capital O and zero; b, d, p and q. Self-hosted in `fonts/`, four
+woff2 files totalling about 111 KB, each carrying the whole 200–800 weight axis. It has to be
+self-hosted: `_headers` sends `default-src 'none'` with `font-src 'self'`, so a Google Fonts
+`<link>` would be blocked by the site's own policy — silently, falling back to the system font
+while looking fine in a local test — and fetching a font at runtime would also tell a third
+party who is reading this page.
+
+**Sizes are in `rem`, and that is the substantive half of "bump the font sizes up".** A larger
+`px` scale is still a fixed scale: it ignores the reader's own browser default-font-size
+setting, so a person who has already told their browser they want bigger text gets nothing.
+`rem` honours it — measured at a 20px default, body renders 22.5px. Body is 1.125rem, card
+prompts 1.1875rem (they are the thing being read), h1 2rem.
+
+**Three colours were darkened at the same time**, because none of the above survives
+grey-on-cream. `--ink-faint` at `#a89882` was about 2.6:1 on the warm paper, well under the
+4.5:1 AA needs; it is `#7a6c58` now. `tools/check-contrast.py` measures all eleven pairs the
+page uses and all eleven pass — it was written because "looks fine on this monitor" is not a
+measurement.
+
+What did **not** change: the palette's character, the card artwork, the layout, or any wording.
+
 ### The domain, and why a name lookup is not a good enough guard
 
 `penguinpebbling.app` went live on 2026-09-14 and the site moved to it. All seven self-references — the canonical link, `og:url`, `og:image`, the JSON-LD `url` and `license`, the `Sitemap` line in `robots.txt`, and the `<loc>` in `sitemap.xml` — are set by `tools/set-domain.py`, which refuses to point at a host it cannot confirm exists.

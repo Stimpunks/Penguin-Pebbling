@@ -35,6 +35,8 @@ og-image.png            1200x630 share card, for links unfurled on social
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
+tools/check-contrast.py checks every colour pair against WCAG AA
+fonts/                  Atkinson Hyperlegible Next, self-hosted, with its OFL licence
 netlify.toml _headers _redirects   Netlify configuration
 ```
 
@@ -68,6 +70,26 @@ python3 tools/make-images.py
 
 It rewrites only what changed and prints the size saved. Needs Pillow (`python3 -m pip install
 --upgrade Pillow`) and nothing else.
+
+## Typography
+
+The page is set in **Atkinson Hyperlegible Next**, self-hosted from `fonts/` — the Braille
+Institute's typeface, drawn so the letterforms most often confused with one another stay
+distinct. Body text is **1.125rem** (18px at the browser default), up from the 15px the widget
+used as an embed inside a blog post, and every size on the page moved with it.
+
+**The scale is in `rem`, which is the part that matters most.** A `px` size ignores the reader's
+own default-font-size setting — zoom still works, but somebody who has set larger text
+everywhere would not get it here. `rem` follows that setting: at a 20px browser default the body
+renders at 22.5px without anyone touching a zoom control.
+
+Colours were darkened at the same time, because a legible typeface at a comfortable size is
+still undone by grey-on-cream nobody can resolve. `tools/check-contrast.py` measures every
+text/background pair the page uses against WCAG 2.1 AA; all eleven pass.
+
+```bash
+python3 tools/check-contrast.py
+```
 
 ## Accessibility
 

@@ -1,22 +1,86 @@
 /* Penguin Pebbling — Helen Edgar, Autistic Realms & Ryan Boren, Stimpunks (2026).
  *
- * The palette, type sizes and radii are Helen's, lifted from the Custom HTML
- * block on autisticrealms.com. What is added here is everything WordPress used
- * to supply: the page around the game. Nothing loads from the network — no
- * webfont, no CDN — so the page renders the same offline as online. */
+ * The palette and the shapes are Helen's, lifted from the Custom HTML block on
+ * autisticrealms.com. The typeface and the type scale are not: the page is set
+ * in Atkinson Hyperlegible Next at sizes chosen for this audience rather than
+ * inherited from a widget embedded in a blog post. See fonts/README.md. */
+
+/* ── Atkinson Hyperlegible Next ────────────────────────────────────────────────
+ * Self-hosted, and not incidentally: `_headers` sends default-src 'none' with
+ * font-src 'self', so a <link> to Google Fonts would be blocked by the site's
+ * own policy — silently, falling back to the system font while looking fine in
+ * a local test. Fetching a font at runtime also tells a third party who is
+ * reading a page about Autistic identity.
+ *
+ * One file per style carries the whole 200–800 weight axis, so there is no
+ * separate file per weight to forget. The italic is really drawn, not sheared,
+ * which is what makes `font-synthesis: none` safe below. */
+
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-roman-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-roman-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: italic;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Atkinson Hyperlegible Next";
+  font-style: italic;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("fonts/atkinson-hyperlegible-next-italic-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
 
 :root {
   --ink: #3d3529;
   --ink-strong: #2e2a24;
-  --ink-soft: #6b5f50;
-  --ink-faint: #a89882;
+  --ink-soft: #5f5545;         /* darkened from #6b5f50 — see tools/check-contrast.py */
+  --ink-faint: #7a6c58;        /* darkened from #a89882 — see tools/check-contrast.py */
   --paper: #faf8f5;
   --paper-warm: #f5f0eb;
   --paper-sunk: #f0ebe4;
   --line: #d9cfc4;
   --line-strong: #a89882;
-  --accent: #7a6b30;
+  --accent: #6b5d28;           /* darkened from #7a6b30 for link contrast on paper */
   --focus: #5a4a30;
+
+  --font: "Atkinson Hyperlegible Next", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  /* Type scale, in rem so it follows the reader's own browser font-size setting.
+   * px would ignore that preference — zoom still works, but the person who has
+   * set a larger default everywhere would not get one here, which on this site
+   * of all sites is the wrong default.
+   *
+   * Body is 1.125rem (18px at the browser default) rather than the 15px the
+   * widget used inside a blog post. Atkinson Hyperlegible Next also has a large
+   * x-height, so it reads larger again at the same nominal size. */
+  --text-xs:   0.875rem;   /* 14px — fine print, credits */
+  --text-sm:   0.9375rem;  /* 15px — secondary prose */
+  --text-base: 1.125rem;   /* 18px — body */
+  --text-md:   1.1875rem;  /* 19px — card prompts, which are the thing being read */
+  --text-lg:   1.25rem;    /* 20px — h3 */
+  --text-xl:   1.5rem;     /* 24px — h2, game title */
+  --text-2xl:  2rem;       /* 32px — h1 */
+  --text-label: 0.8125rem; /* 13px — tracked uppercase labels */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +88,12 @@
 html { -webkit-text-size-adjust: 100%; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font);
+  font-size: var(--text-base);
+  /* Real weights and a real italic exist in the variable font, so never let the
+   * browser fake either — a synthesized bold of an already-legible face is
+   * exactly the smearing this typeface was drawn to avoid. */
+  font-synthesis: none;
   background: var(--paper);
   color: var(--ink);
   line-height: 1.7;
@@ -51,53 +120,50 @@ body {
 }
 .skip-link:focus { left: 0; }
 
-.wrap { padding: 1.5rem; max-width: 680px; margin: 0 auto; }
+.wrap { padding: 1.5rem; max-width: 42rem; margin: 0 auto; }
 
 /* ── Page furniture ────────────────────────────────────────────────────────── */
 
 .masthead { padding: 2.5rem 0 0.5rem; }
 .masthead h1 {
-  font-size: 27px;
-  line-height: 1.3;
-  font-weight: 600;
+  font-size: var(--text-2xl);
+  line-height: 1.2;
+  font-weight: 700;
   color: var(--ink-strong);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  text-wrap: balance;
 }
-.masthead .byline { font-size: 13px; color: var(--ink-soft); }
+.masthead .byline { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.6; }
 .masthead .standfirst {
-  font-size: 15px;
+  font-size: var(--text-base);
   color: var(--ink-soft);
   font-style: italic;
-  margin-top: 0.9rem;
+  margin-top: 1rem;
 }
-.masthead .standfirst + .standfirst { margin-top: 0.7rem; }
 
 .prose h2 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: var(--text-xl);
+  font-weight: 700;
   color: var(--ink-strong);
-  margin: 2rem 0 0.75rem;
-  line-height: 1.35;
+  margin: 2.2rem 0 0.8rem;
+  line-height: 1.3;
+  text-wrap: balance;
 }
 .prose h3 {
-  font-size: 16px;
+  font-size: var(--text-lg);
   font-weight: 600;
   color: var(--ink-strong);
-  margin: 1.6rem 0 0.6rem;
+  margin: 1.8rem 0 0.6rem;
+  line-height: 1.4;
+  text-wrap: balance;
 }
-.prose p { font-size: 15px; margin-bottom: 0.85rem; }
-.prose ul { margin: 0 0 0.85rem 1.2rem; font-size: 15px; }
-.prose li { margin-bottom: 0.35rem; }
+.prose p { font-size: var(--text-base); margin-bottom: 0.9rem; }
+.prose ul { margin: 0 0 0.9rem 1.4rem; font-size: var(--text-base); }
+.prose li { margin-bottom: 0.45rem; }
 .prose a { color: var(--accent); }
-.prose strong { color: var(--ink-strong); font-weight: 600; }
-.prose .lede { font-size: 15px; }
+.prose strong { color: var(--ink-strong); font-weight: 700; }
 
-hr.rule {
-  border: 0;
-  height: 1px;
-  background: var(--line);
-  margin: 2rem 0;
-}
+hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 
 /* ── Game ──────────────────────────────────────────────────────────────────── */
 
@@ -106,46 +172,49 @@ hr.rule {
   margin-bottom: 1.4rem; padding: 1.25rem;
   background: var(--paper-warm); border-radius: 12px; border: 1px solid var(--line);
 }
-.penguin-glyph { font-size: 40px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
-/* The game's <h2> sits inside .prose, so it would otherwise inherit the 2rem
- * top margin meant for article headings. Stated here rather than as a style
+.penguin-glyph { font-size: 2.75rem; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+/* The game's <h2> sits inside .prose, so it would otherwise inherit the heading
+ * margin meant for article headings. Stated here rather than as a style
  * attribute — the CSP is style-src 'self' and an inline style is blocked. */
-.game-header .game-title { font-size: 21px; font-weight: 600; color: var(--ink-strong); margin: 0 0 2px; }
-.game-tagline { font-size: 13px; color: var(--ink-soft); font-style: italic; margin-bottom: 6px; }
-.game-intro { font-size: 13px; color: var(--ink-soft); line-height: 1.65; }
+.game-header .game-title {
+  font-size: var(--text-xl); font-weight: 700; color: var(--ink-strong); margin: 0 0 4px;
+  line-height: 1.25;
+}
+.game-tagline { font-size: var(--text-sm); color: var(--ink-soft); font-style: italic; margin-bottom: 8px; }
+.game-intro { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.65; }
 
 .rules-block {
   border: 1px solid var(--line); border-radius: 12px;
   padding: 1rem 1.25rem; margin-bottom: 1.4rem; background: var(--paper);
 }
 .rules-block details summary {
-  font-size: 14px; font-weight: 600; cursor: pointer; color: var(--ink);
+  font-size: var(--text-base); font-weight: 600; cursor: pointer; color: var(--ink);
   list-style: none; display: flex; align-items: center;
 }
 .rules-block details summary::-webkit-details-marker { display: none; }
 .rules-block details summary::after {
-  content: "+"; color: var(--ink-faint); margin-left: auto; font-size: 18px; font-weight: 400;
+  content: "+"; color: var(--ink-faint); margin-left: auto; font-size: 1.4rem; font-weight: 400;
 }
 .rules-block details[open] summary::after { content: "\2212"; }
 .rule {
-  font-size: 13px; color: var(--ink-soft); margin-top: 10px; line-height: 1.65;
+  font-size: var(--text-sm); color: var(--ink-soft); margin-top: 12px; line-height: 1.65;
   padding-left: 1rem; border-left: 2px solid var(--line); margin-left: 4px;
 }
-.rule + .rule { margin-top: 8px; }
-.rule strong { font-weight: 600; color: var(--ink); }
+.rule + .rule { margin-top: 10px; }
+.rule strong { font-weight: 700; color: var(--ink); }
 
 .section-label {
-  font-size: 11px; letter-spacing: 0.07em; color: var(--ink-faint);
-  text-transform: uppercase; margin-bottom: 10px; font-weight: 600;
+  font-size: var(--text-label); letter-spacing: 0.07em; color: var(--ink-faint);
+  text-transform: uppercase; margin-bottom: 10px; font-weight: 700;
 }
 
-.filter-row { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 1rem; }
+.filter-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; }
 .fbtn {
-  font-family: inherit; font-size: 12px; padding: 5px 12px; border-radius: 20px;
-  border: 1px solid #c8bfb3; background: transparent; cursor: pointer;
+  font-family: inherit; font-size: var(--text-sm); padding: 7px 14px; border-radius: 20px;
+  border: 1px solid #b8ae9f; background: transparent; cursor: pointer;
   color: var(--ink-soft); transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
-.fbtn.on { background: #e8e0d5; border-color: var(--line-strong); color: var(--ink); font-weight: 600; }
+.fbtn.on { background: #e8e0d5; border-color: var(--line-strong); color: var(--ink); font-weight: 700; }
 .fbtn:hover { background: var(--paper-sunk); }
 
 .card-area {
@@ -157,133 +226,138 @@ hr.rule {
 .card-image-wrap img { width: 100%; height: auto; display: block; }
 
 /* The prompt as selectable text, beneath the card art that letters the same
- * words. See ACCESSIBILITY in README.md. */
-.card-text { padding: 1.25rem 1.5rem 0.25rem; }
+ * words. This copy is the one that scales, reflows and can be read aloud — see
+ * ACCESSIBILITY in README.md — so it is set at the largest body size here. */
+.card-text { padding: 1.35rem 1.5rem 0.25rem; }
 .card-locution {
-  font-size: 13px; font-weight: 700; letter-spacing: 0.05em;
-  color: var(--focus); margin-bottom: 0.6rem; text-transform: uppercase;
+  font-size: var(--text-sm); font-weight: 700; letter-spacing: 0.05em;
+  color: var(--focus); margin-bottom: 0.7rem; text-transform: uppercase;
 }
-.card-prompt { font-size: 15px; line-height: 1.7; color: var(--ink); }
+.card-prompt { font-size: var(--text-md); line-height: 1.65; color: var(--ink); }
 .card-sub {
-  font-size: 12px; color: #7a6b50; line-height: 1.6; font-style: italic;
-  border-top: 1px solid var(--line); padding-top: 8px; margin-top: 12px;
+  font-size: var(--text-sm); color: #6b5c45; line-height: 1.6; font-style: italic;
+  border-top: 1px solid var(--line); padding-top: 10px; margin-top: 14px;
 }
 .card-footer {
-  font-size: 11px; color: var(--ink-faint); font-style: italic;
-  padding: 8px 1.5rem; background: var(--paper-warm);
-  border-top: 1px solid var(--line); line-height: 1.5; margin-top: 1rem;
+  font-size: var(--text-xs); color: var(--ink-faint); font-style: italic;
+  padding: 10px 1.5rem; background: var(--paper-warm);
+  border-top: 1px solid var(--line); line-height: 1.5; margin-top: 1.1rem;
 }
 .card-empty {
-  color: var(--ink-faint); font-size: 15px; text-align: center; flex: 1;
+  color: var(--ink-faint); font-size: var(--text-base); text-align: center; flex: 1;
   display: flex; align-items: center; justify-content: center;
   padding: 2rem; background: var(--paper);
 }
 
 .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 1.5rem; }
 .btn-main {
-  font-family: inherit; font-size: 14px; padding: 9px 18px; border-radius: 20px;
+  font-family: inherit; font-size: var(--text-base); padding: 11px 22px; border-radius: 22px;
   border: 1px solid var(--line-strong); background: #e8e0d5; color: var(--ink);
-  cursor: pointer; font-weight: 600;
+  cursor: pointer; font-weight: 700;
 }
 .btn-main:hover { background: #ddd4c5; }
 .btn-skip {
-  font-family: inherit; font-size: 13px; padding: 9px 15px; border-radius: 20px;
-  border: 1px solid #c8bfb3; background: transparent; color: var(--ink-soft); cursor: pointer;
+  font-family: inherit; font-size: var(--text-sm); padding: 11px 18px; border-radius: 22px;
+  border: 1px solid #b8ae9f; background: transparent; color: var(--ink-soft); cursor: pointer;
 }
 .btn-skip:hover { background: var(--paper-sunk); }
 .pebble-row {
-  font-size: 13px; color: var(--ink-soft); margin-left: auto;
+  font-size: var(--text-sm); color: var(--ink-soft); margin-left: auto;
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
 }
+#pebbles-display { font-size: var(--text-base); }
 .btn-pass {
-  font-family: inherit; font-size: 12px; padding: 5px 11px; border-radius: 20px;
-  border: 1px solid #c8bfb3; background: transparent; color: var(--ink-soft); cursor: pointer;
+  font-family: inherit; font-size: var(--text-sm); padding: 7px 13px; border-radius: 20px;
+  border: 1px solid #b8ae9f; background: transparent; color: var(--ink-soft); cursor: pointer;
 }
 .btn-pass:hover { background: var(--paper-sunk); }
 .btn-take {
-  font-family: inherit; font-size: 12px; padding: 5px 11px; border-radius: 20px;
+  font-family: inherit; font-size: var(--text-sm); padding: 7px 13px; border-radius: 20px;
   border: 1px solid var(--line-strong); background: var(--paper-warm);
-  color: var(--focus); cursor: pointer; font-weight: 600;
+  color: var(--focus); cursor: pointer; font-weight: 700;
 }
 .btn-take:hover { background: #ece5db; }
 .pebble-bank {
-  font-size: 12px; color: var(--ink-faint); display: flex; align-items: center;
-  gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-top: 4px; width: 100%;
+  font-size: var(--text-xs); color: var(--ink-faint); display: flex; align-items: center;
+  gap: 6px; flex-wrap: wrap; justify-content: flex-end; margin-top: 6px; width: 100%;
 }
 
 .loc-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 10px; margin-bottom: 1.5rem;
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px; margin-bottom: 1.5rem;
 }
-.loc-card { border-radius: 12px; border: 1px solid; padding: 12px 14px; }
-.loc-card img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 8px; display: block; }
-.loc-name { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
-.loc-desc { font-size: 12px; line-height: 1.5; }
+.loc-card { border-radius: 12px; border: 1px solid; padding: 14px 16px; }
+.loc-card img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px; display: block; }
+.loc-name { font-size: var(--text-base); font-weight: 700; margin-bottom: 4px; }
+.loc-desc { font-size: var(--text-sm); line-height: 1.55; }
 .loc-id { background: #f0ede8; border-color: #c8bfb3; }
-.loc-id .loc-name { color: #3d3529; } .loc-id .loc-desc { color: #7a6f60; }
+.loc-id .loc-name { color: #3d3529; } .loc-id .loc-desc { color: #6b6152; }
 .loc-pp { background: #eaf0ea; border-color: #b5c9b5; }
-.loc-pp .loc-name { color: #1e3a1e; } .loc-pp .loc-desc { color: #4a6b4a; }
+.loc-pp .loc-name { color: #1e3a1e; } .loc-pp .loc-desc { color: #3d5c3d; }
 .loc-ss { background: #f0ebe4; border-color: #c9b9a8; }
-.loc-ss .loc-name { color: #3d2a18; } .loc-ss .loc-desc { color: #7a5c3a; }
+.loc-ss .loc-name { color: #3d2a18; } .loc-ss .loc-desc { color: #6b5031; }
 .loc-pb { background: #f5f0e6; border-color: #d4c69a; }
-.loc-pb .loc-name { color: #3a3010; } .loc-pb .loc-desc { color: #7a6b30; }
+.loc-pb .loc-name { color: #3a3010; } .loc-pb .loc-desc { color: #6b5d28; }
 .loc-dp { background: #efe8f0; border-color: #c4afc9; }
-.loc-dp .loc-name { color: #301830; } .loc-dp .loc-desc { color: #6b4a70; }
+.loc-dp .loc-name { color: #301830; } .loc-dp .loc-desc { color: #5e3f63; }
 
-.divider { height: 1px; background: var(--line); margin: 1.25rem 0; }
+.divider { height: 1px; background: var(--line); margin: 1.4rem 0; }
 
 .about-block {
   border: 1px solid var(--line); border-radius: 12px;
-  padding: 1rem 1.25rem; background: var(--paper);
+  padding: 1.1rem 1.35rem; background: var(--paper);
 }
-.about-block p { font-size: 12px; color: var(--ink-soft); line-height: 1.7; }
+.about-block p { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; }
 .about-block a { color: var(--accent); }
 .about-title {
-  font-size: 11px; font-weight: 600; color: var(--ink-faint);
-  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+  font-size: var(--text-label); font-weight: 700; color: var(--ink-faint);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 10px;
 }
 
 /* ── Downloads ─────────────────────────────────────────────────────────────── */
 
 .download {
   border: 1px solid var(--line); border-radius: 12px;
-  padding: 1rem 1.25rem; margin-bottom: 1rem; background: var(--paper-warm);
+  padding: 1.1rem 1.35rem; margin-bottom: 1rem; background: var(--paper-warm);
 }
-.download h3 { margin: 0 0 0.3rem; font-size: 15px; color: var(--ink-strong); }
-.download p { font-size: 13px; color: var(--ink-soft); margin-bottom: 0.7rem; }
+.download h3 { margin: 0 0 0.35rem; font-size: var(--text-lg); color: var(--ink-strong); }
+.download p { font-size: var(--text-sm); color: var(--ink-soft); margin-bottom: 0.8rem; }
 .download a.btn-download {
-  display: inline-block; font-size: 13px; font-weight: 600;
-  padding: 8px 16px; border-radius: 20px;
+  display: inline-block; font-size: var(--text-base); font-weight: 700;
+  padding: 10px 20px; border-radius: 22px;
   border: 1px solid var(--line-strong); background: #e8e0d5;
   color: var(--ink); text-decoration: none;
 }
 .download a.btn-download:hover { background: #ddd4c5; }
-.download .meta { font-size: 11px; color: var(--ink-faint); margin: 0.5rem 0 0; }
+.download .meta { font-size: var(--text-xs); color: var(--ink-faint); margin: 0.6rem 0 0; }
 
 .support {
   border: 1px solid #d4c69a; border-radius: 12px;
-  padding: 1.25rem; margin: 1.5rem 0; background: #f5f0e6;
+  padding: 1.35rem; margin: 1.5rem 0; background: #f5f0e6;
 }
-.support h3 { margin: 0 0 0.5rem; font-size: 15px; color: #3a3010; }
-.support p { font-size: 13px; color: #7a6b30; margin-bottom: 0.7rem; }
+.support h3 { margin: 0 0 0.55rem; font-size: var(--text-lg); color: #3a3010; }
+.support p { font-size: var(--text-sm); color: #6b5d28; margin-bottom: 0.8rem; }
 .support a { color: #5a4a30; }
 
 .sitefoot {
-  border-top: 1px solid var(--line); margin-top: 2.5rem; padding: 1.5rem 0 3rem;
-  font-size: 12px; color: var(--ink-soft); line-height: 1.7;
+  border-top: 1px solid var(--line); margin-top: 2.5rem; padding: 1.6rem 0 3rem;
+  font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7;
 }
 .sitefoot a { color: var(--accent); }
-.sitefoot p + p { margin-top: 0.6rem; }
+.sitefoot p + p { margin-top: 0.7rem; }
 
-.refs { font-size: 12px; color: var(--ink-soft); line-height: 1.7; }
-.refs p { margin-bottom: 0.6rem; padding-left: 1.5rem; text-indent: -1.5rem; }
+.refs { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; }
+.refs p { margin-bottom: 0.7rem; padding-left: 1.5rem; text-indent: -1.5rem; }
 .refs a { color: var(--accent); word-break: break-word; }
 
 @media (max-width: 480px) {
   .wrap { padding: 1rem; }
-  .masthead h1 { font-size: 23px; }
+  .masthead { padding-top: 1.75rem; }
+  .masthead h1 { font-size: 1.75rem; }
   .pebble-row { margin-left: 0; justify-content: flex-start; width: 100%; }
   .pebble-bank { justify-content: flex-start; }
+  .card-text { padding: 1.15rem 1.15rem 0.25rem; }
+  .card-footer { padding-left: 1.15rem; padding-right: 1.15rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
