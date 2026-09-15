@@ -62,11 +62,15 @@
   Content-Security-Policy: default-src 'none'; script-src 'self'; worker-src 'self'; connect-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
 # Card art changes only when Helen redraws a card, but the filenames are stable
-# — `infodumping-1.webp` says nothing about its contents the way a content hash
-# would. So `immutable` for a year was a promise this site cannot keep: the
+# — `infodumping-locution.webp` says nothing about its contents the way a content
+# hash would. So `immutable` for a year was a promise this site cannot keep: the
 # documented way to replace a card is to drop a new original into cards/print/
 # at the same filename and re-run tools/make-images.py, which leaves every
 # returning reader holding the old picture with nothing to invalidate it.
+#
+# This now covers the five locution cards on locutions.html and the five cut-out
+# illustrations in cards/art/. The thirty prompt-card derivatives that used to
+# live here were retired with the re-set.
 #
 # A week, revalidating in the background. Long enough that a reader on a metered
 # connection is not refetching 50 KB of artwork each visit, short enough that a

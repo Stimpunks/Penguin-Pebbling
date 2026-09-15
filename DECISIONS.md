@@ -60,7 +60,7 @@ The card's imagery goes from 1.5 MB across thirty files, one fetched per draw, t
 
 **The alt text is gone, and that is the correct outcome.** The prompt used to be carried in `alt` because the picture was the only copy. The illustrations are decorative now — the locution is named in text beside them — so an empty `alt` is right, and a screen reader reaches the prompt as prose rather than as a description of a picture.
 
-The print masters in `cards/print/` are untouched and the printable PDF deck still comes from them. The thirty prompt-card WebP derivatives are no longer used by anything.
+The print masters in `cards/print/` are untouched and the printable PDF deck still comes from them. **The thirty prompt-card WebP derivatives were retired on 2026-09-15**, once it was clear nothing linked them: 1.5 MB that `tools/make-images.py` went on regenerating and Netlify went on deploying for as long as nobody looked. That tool now owns only the five locution cards — the ones `locutions.html` still shows, where the card itself is the subject — and deletes any prompt-card WebP it finds, so the leftover cannot come back by someone re-running it. Deleting a derivative is not deleting an original: all thirty-five masters stay.
 
 ### The card text under the card art was approved
 

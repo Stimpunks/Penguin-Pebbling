@@ -35,8 +35,8 @@ privacy.html            what the site does with your data, which is nothing
 penguin-pebbling.css    Helen's palette and type, extended to cover the page
 penguin-pebbling.js     the thirty cards and the game logic
 cards/art/              the re-set deck's artwork — 1 pebble stack, 5 illustrations
-cards/                  35 WebP derivatives; only the 5 locution cards are still shown
-cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
+cards/                  the 5 locution cards as WebP, shown on locutions.html
+cards/print/            all 35 of Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
 og-image.png            generated — 1200x630 share card, drawn as the card the site draws
 favicon.ico             generated — the fallback for anything that wants an .ico

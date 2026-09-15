@@ -1,14 +1,25 @@
 #!/usr/bin/env python3
-"""Generate the web card images from the print masters.
+"""Generate the web copies of the five locution cards from the print masters.
 
 `cards/print/*.png` are Helen's originals at 1748x1240 — roughly A5 landscape at
 300dpi, and the resolution you want if you are printing a deck. They are also
-~770 KB each, and the page draws one card at a time, so serving the masters
-would spend 27 MB to show thirty-five pictures.
+~770 KB each, so the masters stay in the repository as the source of truth and
+this writes display copies next to them: WebP at 1280px wide.
 
-So the masters stay in the repository as the source of truth and this writes the
-display copies next to them: WebP at 1280px wide, which is 2x the 640px the card
-ever occupies inside the 680px column. Re-run after replacing any master.
+**Only the five locution cards, since the deck was re-set as text.** This used to
+convert all thirty-five masters, because the game drew the thirty prompt cards as
+pictures. It does not any more: the prompt, the locution name and the aside are
+text, and the only artwork on a card is the illustration that
+tools/make-card-art.py cuts out — one per locution, not one per card. The thirty
+prompt-card WebPs went on being regenerated, and deployed, and referenced by
+nothing, for as long as nobody looked. They are gone.
+
+The five that remain are the whole cards shown on locutions.html, which is still
+a page of pictures and is right to be: there the card IS the subject.
+
+The thirty prompt masters stay in `cards/print/`. They are the printable deck and
+the source tools/make-card-art.py cuts the illustrations out of — deleting a
+derivative is not deleting an original.
 
 Needs Pillow:  python3 -m pip install --upgrade Pillow
 """
@@ -28,9 +39,17 @@ QUALITY = 82
 
 
 def main() -> int:
-    masters = sorted(SRC.glob("*.png"))
-    if not masters:
-        sys.exit(f"No print masters found in {SRC}")
+    masters = sorted(SRC.glob("*-locution.png"))
+    if len(masters) != 5:
+        sys.exit(f"Expected 5 locution masters in {SRC}, found {len(masters)}. "
+                 f"Fix this rather than publishing a short set.")
+
+    # A prompt-card WebP here is a leftover from before the re-set: nothing links
+    # one, and leaving it would quietly ship 1.5 MB and confuse the next reader
+    # into thinking the game still fetches them.
+    stale = [p for p in OUT.glob("*.webp") if not p.stem.endswith("-locution")]
+    for p in stale:
+        p.unlink()
 
     written = skipped = 0
     for master in masters:
@@ -48,8 +67,9 @@ def main() -> int:
 
     before = sum(p.stat().st_size for p in masters)
     after = sum(p.stat().st_size for p in OUT.glob("*.webp"))
-    print(f"{written} written, {skipped} already current")
-    print(f"masters {before/1e6:.1f} MB -> web {after/1e6:.1f} MB "
+    print(f"{written} written, {skipped} already current"
+          + (f", {len(stale)} stale removed" if stale else ""))
+    print(f"5 locution masters {before/1e6:.1f} MB -> web {after/1e6:.1f} MB "
           f"({after/before:.0%} of original)")
     return 0
 

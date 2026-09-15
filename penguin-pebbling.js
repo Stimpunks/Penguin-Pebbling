@@ -4,9 +4,16 @@
  *
  * The deck below is the thirty cards as published at autisticrealms.com, parsed
  * out of the original page rather than retyped, so the wording is hers to the
- * character. `image` names a file in cards/ (WebP, shown) and cards/print/ (PNG,
- * the master). `prompt` and `aside` carry the same words that are drawn on the
- * card face — see ACCESSIBILITY in README.md for why holding both matters.
+ * character.
+ *
+ * `image` names a print master in cards/print/ — and nothing else, since the
+ * deck was re-set as text. It is no longer fetched: renderCard strips the
+ * trailing number off it to get the locution, because Helen drew one
+ * illustration per locution rather than one per card. The thirty prompt-card
+ * WebPs it used to point at are gone.
+ *
+ * `prompt` and `aside` are the card. They are not a transcription of something
+ * drawn elsewhere any more — they are what the page sets.
  */
 
 const DECK = [

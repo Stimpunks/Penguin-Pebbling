@@ -29,7 +29,7 @@ The one time that was stretched is worth knowing about. Rendering the card promp
 
 | File | Generated from | By |
 |---|---|---|
-| `cards/` (35 WebP) | `cards/print/` (the PNG masters) | `tools/make-images.py` |
+| `cards/` (5 locution WebP) | `cards/print/*-locution.png` | `tools/make-images.py` |
 | `changelog.html` | `CHANGELOG.md` | `tools/build-changelog.py` |
 | `search-index.json` | `penguin-pebbling.js` | `tools/make-search-index.py` |
 | `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
