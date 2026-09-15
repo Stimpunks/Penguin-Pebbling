@@ -36,8 +36,21 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
+# The stylesheet and the script revalidate with the HTML, and deliberately do
+# NOT get the long cache the images and fonts do.
+#
+# There is no build step here, so these have stable names rather than
+# content-hashed ones. That means the page and its stylesheet are versioned
+# together only by whatever each reader happens to hold. With max-age=3600 plus
+# stale-while-revalidate=86400 a returning reader could be served today's HTML
+# against a stylesheet up to a day old — and the two have to agree about class
+# names and DOM shape. Observed on the typography change: the live page kept
+# rendering at the old sizes in a browser whose CSS copy had not expired.
+#
+# 16 KB and 12 KB. A conditional request that usually answers 304 is cheaper
+# than a page that renders wrong for a day, so correctness wins the round trip.
 /penguin-pebbling.css
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /penguin-pebbling.js
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
