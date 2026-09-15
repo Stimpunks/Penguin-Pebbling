@@ -38,10 +38,13 @@ cards/                  35 WebP images the page shows (1280px, ~50 KB each)
 cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
 og-image.png            1200x630 share card, for links unfurled on social
+favicon.ico             generated — the fallback for anything that wants an .ico
+icon-maskable.png       generated — the Android home-screen icon, safe-zone padded
 search-index.json       generated from penguin-pebbling.js — the deck's text, for our mirror
 llms.txt                generated from the pages — a short map of the site for LLMs
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
+tools/make-icons.py     regenerates favicon.ico and icon-maskable.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
 tools/build-changelog.py renders CHANGELOG.md into changelog.html

@@ -31,6 +31,7 @@ Helen Edgar and Ryan Boren both have rights to this work. **So *you* is whoever 
 | `search-index.json` | `penguin-pebbling.js` | `tools/make-search-index.py` |
 | `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
 | `og-image.png` | drawn from scratch | `tools/make-og-image.py` |
+| `favicon.ico`, `icon-maskable.png` | `apple-touch-icon.png` | `tools/make-icons.py` |
 | the nav and footer in every page but `index.html` | the marked blocks in `index.html` | `tools/sync-shell.py` |
 
 Edit the source on the left-hand side, then run the tool. An edit on the right is lost on the next run, silently.
@@ -49,7 +50,7 @@ Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** —
 
 ## The tools
 
-Eight, all Python, all run by hand, none wired into a build. Five take `--check`, which reports drift and writes nothing.
+Nine, all Python, all run by hand, none wired into a build. Five take `--check`, which reports drift and writes nothing.
 
 | Tool | What it does | `--check`? |
 |---|---|---|
@@ -61,8 +62,9 @@ Eight, all Python, all run by hand, none wired into a build. Five take `--check`
 | `tools/make-llms-txt.py` | regenerates `llms.txt`, the curated index for language models | yes |
 | `tools/make-images.py` | regenerates `cards/` from `cards/print/` | no |
 | `tools/make-og-image.py` | regenerates `og-image.png` | no |
+| `tools/make-icons.py` | regenerates `favicon.ico` and `icon-maskable.png` | no |
 
-`make-images.py` and `make-og-image.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
+`make-images.py`, `make-og-image.py` and `make-icons.py` need Pillow; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
 
 `build-changelog.py` understands a deliberately small Markdown dialect and treats anything else as a **hard error rather than a silent drop**. That is on purpose: a changelog that quietly loses an entry still looks fine.
 
