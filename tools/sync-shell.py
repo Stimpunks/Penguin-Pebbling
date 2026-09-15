@@ -26,7 +26,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE = "index.html"
 PAGES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
-         "about.html", "changelog.html"]
+         "about.html", "changelog.html", "privacy.html"]
+
+# Pages deliberately reached from the footer rather than the Menu. They still get
+# the shell stamped — that is the whole point — they just have no nav link to mark
+# as current. A privacy notice belongs in the footer, and keeping it out of the
+# Menu leaves the six-item game nav as it was designed.
+FOOTER_ONLY = {"privacy.html"}
 BLOCKS = ["nav", "footer"]
 
 CTA = '\n      <a class="topbar-cta" href="index.html">Play the game</a>'
@@ -54,8 +60,12 @@ def localise(body, page, name):
     body = re.sub(r'\s+aria-current="page"', "", body)
     pattern = r'(<a href="%s")' % re.escape(page)
     if not re.search(pattern, body):
-        sys.exit(f"nav has no link to {page} — add one in {SOURCE} before syncing")
-    body = re.sub(pattern, r'\1 aria-current="page"', body, count=1)
+        # Still an error for a normal page: this is what catches a nav link left
+        # behind by a rename, which would otherwise lose aria-current silently.
+        if page not in FOOTER_ONLY:
+            sys.exit(f"nav has no link to {page} — add one in {SOURCE} before syncing")
+    else:
+        body = re.sub(pattern, r'\1 aria-current="page"', body, count=1)
     # the "Play the game" button is pointless on the game page
     body = body.replace(CTA, "")
     if page != SOURCE:

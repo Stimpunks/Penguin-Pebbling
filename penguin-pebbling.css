@@ -569,6 +569,7 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 .sitefoot .wrap { padding-top: 1.6rem; padding-bottom: 3rem; }
 .sitefoot a { color: var(--accent); }
 .sitefoot p + p { margin-top: 0.7rem; }
+.footlinks { margin-top: 1rem; }
 
 .refs { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; }
 .refs p { margin-bottom: 0.7rem; padding-left: 1.5rem; text-indent: -1.5rem; }

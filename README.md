@@ -31,6 +31,7 @@ locutions.html          the five locution cards and a quick guide
 print.html              the printable deck, Plain Language and Easy Read guides
 about.html              sources, practitioners, licence, references
 changelog.html          generated from CHANGELOG.md — never edit it directly
+privacy.html            what the site does with your data, which is nothing
 penguin-pebbling.css    Helen's palette and type, extended to cover the page
 penguin-pebbling.js     the thirty cards and the game logic
 cards/                  35 WebP images the page shows (1280px, ~50 KB each)

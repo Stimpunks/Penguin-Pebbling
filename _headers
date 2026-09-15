@@ -11,28 +11,46 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
 
+  # Netlify's "Force HTTPS" setting already sends HSTS, but only
+  # `max-age=31536000` with no `includeSubDomains`. Setting it here overrides
+  # that with the two-year policy RFC 6797 and OWASP ask for, and keeps it
+  # reviewable in a diff like every other header rather than living only in a
+  # dashboard. No `preload`: the preload list's own operator now advises against
+  # it, browsers auto-upgrade HTTP navigations anyway, and removal takes months.
+  Strict-Transport-Security: max-age=63072000; includeSubDomains
+
   # Nothing here needs framing, and the game carries an attribution requirement.
   # Framing it inside someone else's chrome is how the credit gets lost.
   X-Frame-Options: DENY
 
   # No inline script and no external origin is needed at all: the page loads one
-  # local stylesheet and one local script, and every image and PDF is local.
+  # local stylesheet and two local scripts, and every image, font and PDF is
+  # local.
   # `img-src` allows data: because nothing uses it today and it costs nothing to
   # keep an inline SVG working if one is ever added.
   Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
 
-# Card images and PDFs are content-addressed by name and only change when the
-# artwork does. A year is safe, and `stale-while-revalidate` is allowed here
-# because these are not must-revalidate.
+# Card art changes only when Helen redraws a card, but the filenames are stable
+# — `infodumping-1.webp` says nothing about its contents the way a content hash
+# would. So `immutable` for a year was a promise this site cannot keep: the
+# documented way to replace a card is to drop a new original into cards/print/
+# at the same filename and re-run tools/make-images.py, which leaves every
+# returning reader holding the old picture with nothing to invalidate it.
+#
+# A week, revalidating in the background. Long enough that a reader on a metered
+# connection is not refetching 50 KB of artwork each visit, short enough that a
+# correction actually reaches people. The fonts below keep the year because
+# their names really are versioned.
 /cards/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
 /downloads/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
-# Font files never change without changing name, and a missing font is the most
-# visible possible regression on a page whose typeface is an accessibility
-# choice. Cache them as hard as the card art.
+# Font files never change without changing name — the filename carries the
+# subset and style — and a missing font is the most visible possible regression
+# on a page whose typeface is an accessibility choice. These get the long cache
+# the card art no longer does.
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 

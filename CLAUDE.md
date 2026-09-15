@@ -36,9 +36,13 @@ Edit the source on the left-hand side, then run the tool. An edit on the right i
 
 ## The shape of the site
 
-**Six pages, not one.** `index.html` is the game and a short list of links; `how-to-play.html`, `locutions.html`, `print.html`, `about.html` and `changelog.html` hold everything else, reached from a `<details>` **Menu** in a sticky bar. It was one long page for a day, with the game buried under a thousand words — `DECISIONS.md` has the reasoning.
+**Seven pages, not one.** `index.html` is the game and a short list of links; `how-to-play.html`, `locutions.html`, `print.html`, `about.html` and `changelog.html` hold everything else, reached from a `<details>` **Menu** in a sticky bar. It was one long page for a day, with the game buried under a thousand words — `DECISIONS.md` has the reasoning.
 
-The nav and footer are authored once in `index.html`, between `<!-- shell:nav -->` and `<!-- shell:footer -->` markers, and stamped into the other five by `tools/sync-shell.py`. **Edit the nav in `index.html` and then run the tool** — editing it in `about.html` is editing a copy.
+`privacy.html` is the seventh and is deliberately **not** in the Menu — it is linked from the footer, which is where a privacy notice belongs and leaves the six-item game nav as designed. `sync-shell.py` knows this: it still stamps the shell into the page, and `FOOTER_ONLY` is what stops it erroring over a page with no nav link. Anything else missing from the nav is still a hard error, because that is what catches a rename.
+
+The nav and footer are authored once in `index.html`, between `<!-- shell:nav -->` and `<!-- shell:footer -->` markers, and stamped into the other six by `tools/sync-shell.py`. **Edit the nav in `index.html` and then run the tool** — editing it in `about.html` is editing a copy.
+
+**A new page has to be registered in four places**: the nav (or `FOOTER_ONLY`), `sitemap.xml`, `sync-shell.py`'s `PAGES`, and `set-domain.py`'s `FILES`. Miss one and nothing errors — the page simply drifts, or never gets its domain rewritten.
 
 Alongside them: `penguin-pebbling.css` (one stylesheet), and **two scripts** — `penguin-pebbling.js` (the thirty cards and the game logic) and `theme.js` (light/dark, deliberately loaded from `<head>` without `defer` so the theme lands before first paint).
 
