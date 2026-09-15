@@ -1,0 +1,96 @@
+# Penguin Pebbling
+
+**A Game of Creating Belonging, Building Connection and Understanding Autistic Identity**
+
+A neuro-affirming card game built around the Five Autistic Love Locutions — infodumping,
+parallel play, support swapping, deep pressure, and penguin pebbling itself. Thirty cards,
+six per locution. No winners. No wrong way to play.
+
+Developed by **Helen Edgar** at [Autistic Realms](https://autisticrealms.com) and **Ryan Boren**
+at [Stimpunks](https://stimpunks.org), 2026.
+
+Destined for **penguinpebbling.app**, hosted on Stimpunks' Netlify.
+
+----
+
+## What this repository is
+
+The game was first published as a WordPress post at Autistic Realms, with the playable part
+living in a single Custom HTML block. That block turned out to contain a whole `<head>` and
+`<body>` — Helen had written it as a standalone HTML page and pasted it in. This repository is
+that page given its own address, with the surrounding article brought along and every asset
+pulled local.
+
+**There is no build step and no dependency to install.** It is HTML, one stylesheet, one script,
+and a folder of pictures. Open `index.html` and it works; push the folder and it deploys.
+
+```
+index.html              the whole page — article, game, downloads, references
+penguin-pebbling.css    Helen's palette and type, extended to cover the page
+penguin-pebbling.js     the thirty cards and the game logic
+cards/                  35 WebP images the page shows (1280px, ~50 KB each)
+cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
+downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
+tools/make-images.py    regenerates cards/ from cards/print/
+_headers _redirects     Netlify configuration
+```
+
+## Nothing loads from autisticrealms.com
+
+That was the point of the import. Every image, every PDF, the stylesheet and the script are
+served from this repository. There is no webfont, no CDN, no analytics, no third-party anything
+— the page renders identically with the network unplugged after first load, and the
+Content-Security-Policy in `_headers` is `default-src 'none'` because nothing needs more.
+
+**Links to Autistic Realms are a different matter and they stay.** The citations to Helen's
+writing, the practitioner guide, and the shop link where the deck can be bought or donated for
+are credit and livelihood, not dependencies. Removing them would be the bug.
+
+## Working on it
+
+Any static server will do:
+
+```bash
+python3 -m http.server 8913
+```
+
+After replacing a card image, drop the new original in `cards/print/` at the same filename and
+run:
+
+```bash
+python3 tools/make-images.py
+```
+
+It rewrites only what changed and prints the size saved. Needs Pillow (`python3 -m pip install
+--upgrade Pillow`) and nothing else.
+
+## Accessibility
+
+This is a game about belonging, made for Autistic and otherwise neurodivergent people. The
+accessibility of the page is part of the work, not a finishing pass.
+
+**The card prompts are lettered into the card artwork.** That is how Helen designed the deck and
+it is right for print — but on the web it means the words cannot be zoomed independently,
+reflowed, restyled into a reading font, selected, copied, translated, or handed to a
+highlighter. On a phone the lettering is small and fixed.
+
+So the page shows **the card, and the same words as text beneath it**. The text is the
+authoritative copy: it is what a screen reader gets in the `alt`, what reflows at 400% zoom, and
+what a reader can select. *This is the one deliberate departure from the published page* — see
+`DECISIONS.md`. It is a handful of lines in `penguin-pebbling.js` (`renderCard`) if it is ever
+decided against.
+
+Also here, and all of it uncontroversial: a skip link, real `<button>` elements with
+`aria-pressed` on the filters, `aria-live` on the card area so a drawn card is announced, full
+prompt text in `alt` rather than a 150-character prefix, visible focus rings,
+`prefers-reduced-motion` honoured, and `width`/`height` on every image so nothing shifts as the
+page loads.
+
+## Licence
+
+**Free to use, share, and adapt for non-commercial purposes.** Please credit Helen Edgar,
+Autistic Realms and Ryan Boren, Stimpunks, and link back.
+
+That is the licence as the game itself states it, and it is deliberately not one of the standard
+open-source licences — the code and the cards travel together here, and the cards are not MIT.
+See `ATTRIBUTIONS.md` for what belongs to whom, and `DECISIONS.md` for what is still open.

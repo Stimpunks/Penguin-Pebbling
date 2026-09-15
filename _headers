@@ -1,0 +1,37 @@
+# Netlify response headers.
+
+/*
+  # HTML and other documents revalidate every time. The page is small; being
+  # current matters more than saving a round trip.
+  #
+  # No `stale-if-error` alongside `must-revalidate` — RFC 9111 forbids serving a
+  # stale must-revalidate response, so the two cancel.
+  Cache-Control: public, max-age=0, must-revalidate
+
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+
+  # Nothing here needs framing, and the game carries an attribution requirement.
+  # Framing it inside someone else's chrome is how the credit gets lost.
+  X-Frame-Options: DENY
+
+  # No inline script and no external origin is needed at all: the page loads one
+  # local stylesheet and one local script, and every image and PDF is local.
+  # `img-src` allows data: because nothing uses it today and it costs nothing to
+  # keep an inline SVG working if one is ever added.
+  Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+
+# Card images and PDFs are content-addressed by name and only change when the
+# artwork does. A year is safe, and `stale-while-revalidate` is allowed here
+# because these are not must-revalidate.
+/cards/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/downloads/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/penguin-pebbling.css
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/penguin-pebbling.js
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
