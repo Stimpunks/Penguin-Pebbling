@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Keep the nav and footer identical across every page.
 
-The site is five hand-authored HTML files with no build step, and the nav and
-footer appear in all five. Left alone that is five copies of one thing, which
+The site is six hand-authored HTML files with no build step, and the nav and
+footer appear in all six. Left alone that is six copies of one thing, which
 drifts — a link added to the menu on one page and not the others, or a page that
 still claims to be the current one after being renamed. The failure is quiet:
 every page still renders.

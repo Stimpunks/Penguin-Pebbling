@@ -4,7 +4,7 @@
 The site's own address is written into every page's canonical link, og:url and
 og:image, plus the JSON-LD `url` and `license` on index.html, the Sitemap line in
 robots.txt, and one <loc> per page in sitemap.xml. That is dozens of places
-across seven files, and it grows every time a page is added. There is no build step to
+across eight files, and it grows every time a page is added. There is no build step to
 derive them from one constant, so without this they get changed by hand and one
 gets missed — and the one that gets missed is usually the canonical, which is the
 single worst one to point at a domain that does not resolve.

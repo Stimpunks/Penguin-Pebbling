@@ -9,7 +9,7 @@ six per locution. No winners. No wrong way to play.
 Developed by **Helen Edgar** at [Autistic Realms](https://autisticrealms.com) and **Ryan Boren**
 at [Stimpunks](https://stimpunks.org), 2026.
 
-Destined for **penguinpebbling.app**, hosted on Stimpunks' Netlify.
+Lives at **penguinpebbling.app**, hosted on Stimpunks' Netlify.
 
 ----
 
@@ -21,7 +21,7 @@ living in a single Custom HTML block. That block turned out to contain a whole `
 that page given its own address, with the surrounding article brought along and every asset
 pulled local.
 
-**There is no build step and no dependency to install.** It is HTML, one stylesheet, one script,
+**There is no build step and no dependency to install.** It is HTML, one stylesheet, two scripts,
 and a folder of pictures. Open `index.html` and it works; push the folder and it deploys.
 
 ```
@@ -37,6 +37,7 @@ cards/                  35 WebP images the page shows (1280px, ~50 KB each)
 cards/print/            the same 35 as Helen's original PNGs (1748x1240) — print masters
 downloads/              Plain Language guide, Easy Read guide, printable deck (PDF)
 og-image.png            1200x630 share card, for links unfurled on social
+search-index.json       generated from penguin-pebbling.js — the deck's text, for our mirror
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  regenerates og-image.png
 tools/set-domain.py     rewrites the site's own address everywhere at once
@@ -53,8 +54,8 @@ netlify.toml _headers _redirects   Netlify configuration
 
 ## Nothing loads from autisticrealms.com
 
-That was the point of the import. Every image, every PDF, the stylesheet and the script are
-served from this repository. There is no webfont, no CDN, no analytics, no third-party anything
+That was the point of the import. Every image, every PDF, the stylesheet, both scripts and the
+typeface are served from this repository. There is no CDN, no analytics, no third-party anything
 — the page renders identically with the network unplugged after first load, and the
 Content-Security-Policy in `_headers` is `default-src 'none'` because nothing needs more.
 
@@ -97,7 +98,7 @@ the printable deck and the Easy Read guide, and those are exactly what someone w
 game needs.
 
 **The nav and footer live in `index.html` and are stamped into the other pages** by
-`tools/sync-shell.py`. Five hand-maintained copies of one menu is a drift problem with a quiet
+`tools/sync-shell.py`. Six hand-maintained copies of one menu is a drift problem with a quiet
 failure mode — a link added in one place, a page that still claims to be current after a rename.
 Edit the nav in `index.html`, then:
 
