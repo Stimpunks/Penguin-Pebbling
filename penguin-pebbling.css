@@ -731,7 +731,10 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
   line-height: 1.25; margin-bottom: 1rem;
 }
 .pcard-prompt {
-  font-size: var(--text-md); line-height: 1.5;
+  /* 1.65, which is what the prompt had when it was set as prose beneath the
+   * card. A short measure needs MORE leading, not less: the eye has to find the
+   * start of the next line more often. */
+  font-size: var(--text-md); line-height: 1.65;
   margin-bottom: 1.25rem;
 }
 .pcard-prompt p + p { margin-top: 0.75rem; }
@@ -759,9 +762,19 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 .pcard[data-locution="penguin-pebbling"] .pcard-art { background: var(--card-tint-penguin-pebbling); }
 .pcard[data-locution="deep-pressure"] .pcard-art    { background: var(--card-tint-deep-pressure); }
 
-/* One column on a narrow screen. The drawing goes under the words: on a phone
- * the prompt is what you came for, and it should not start below a picture. */
-@media (max-width: 560px) {
+/* One column below 760px. The drawing goes under the words: the prompt is what
+ * you came for, and it should not start below a picture.
+ *
+ * 1000 rather than 560, because the breakpoint is about the MEASURE and not the
+ * device. Two panels give the prompt a little under half the card, and that only
+ * reaches the 45 characters a line that reads comfortably once the card itself
+ * is about 960px — which needs roughly a 1000px viewport. Measured below that
+ * and it is worse than stacking every time: 27 characters in the bare prose
+ * column, 35 at an 800px viewport. Stacked it gets the full width and about 58.
+ *
+ * So the rule is: use two panels only where two panels actually read. Below
+ * that, stack, even on a tablet that looks wide enough for a card. */
+@media (max-width: 1000px) {
   .pcard { grid-template-columns: 1fr; }
   .pcard-art { padding: 1rem; flex-direction: column; }
   .pcard-art img { max-width: 180px; }
@@ -771,6 +784,35 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 /* Forced colours flatten both panel fills to one ground, which would leave the
  * two halves of the card indistinguishable. A border is honoured, so the seam
  * survives as a line. */
+/* Above 1000px the card steps outside the 680px prose column.
+ *
+ * The column is right for prose and wrong for this: it capped the card at 624px
+ * however wide the screen was, so the prompt stayed at 27 characters a line on a
+ * 27-inch monitor exactly as on a laptop. Widening the card is the only thing
+ * that moves that number, because the constraint is the column and not the
+ * viewport.
+ *
+ * A percentage margin resolves against the containing block's width, so
+ * (100% - width) / 2 is exactly the negative offset that re-centres a child
+ * wider than its parent — no transform, no positioning, and it stays centred if
+ * the column ever changes width.
+ *
+ * The split moves to 1.25/1 as well. Helen's card is 50.6/49.4, which is right
+ * for a printed card where the words are set to fit; on screen the words are
+ * given and the panel has to fit them. At 920px that is about 47 characters a
+ * line, inside the comfortable range for the first time. */
+@media (min-width: 1001px) {
+  .card-area {
+    --card-wide: min(960px, calc(100vw - 3rem));
+    width: var(--card-wide);
+    margin-left: calc((100% - var(--card-wide)) / 2);
+  }
+  .pcard { grid-template-columns: 1.25fr 1fr; }
+  .pcard-text { padding: 1.9rem 2.25rem 1.5rem; }
+  .pcard-art { padding: 1.75rem 1.25rem; }
+  .pcard-art img { max-width: 260px; }
+}
+
 @media (forced-colors: active) {
   .pcard { border: 1px solid; }
   .pcard-art { border-top: 1px solid; }

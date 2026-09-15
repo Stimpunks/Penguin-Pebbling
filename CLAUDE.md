@@ -121,6 +121,8 @@ Already in place and worth not regressing: a skip link, real `<button>`s with `a
 
 **The card follows the theme, and the pebble stack is inline SVG for that reason.** An SVG loaded with `<img src>` is its own document and cannot see this page's `data-theme`, so it would track the OS and ignore the toggle. `pebbleStack()` builds it in the DOM so it inherits `color`. Do not "tidy" it into an `<img>`.
 
+**The card's breakpoints are about line length, not devices.** It stacks below 1000px and breaks out of the prose column to 960px above it, because two panels only reach a readable measure (45–75 characters) once the card is about 960px wide. Measured: 58 characters stacked, 46 in two panels, and 27 in the bare prose column, which is what it was. Do not move these to match a device width.
+
 **The card deliberately has no fixed aspect ratio.** Reflowing is the whole reason the deck was re-set: the prompt has to be allowed to make the card taller at 400% zoom rather than overflow it. A rule that pins the card to 1.41:1 undoes the change.
 
 **Contrast is measured, not eyeballed.** `tools/check-contrast.py` covers both themes and also checks that the `data-theme` and `prefers-color-scheme` blocks have not drifted apart — two copies of one palette being the obvious way this breaks later. Low stimulation here is about surfaces, not text: muting the text too would hurt exactly the readers this is for.

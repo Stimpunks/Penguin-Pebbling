@@ -10,6 +10,22 @@ What was chosen during the import, why, and what is still open. Newest at the to
 
 ## Settled during the import
 
+### The card breaks out of the prose column, because the measure was too short
+
+Ryan, 2026-09-15: *"I kinda miss having the text beneath the cards. Can that come back, or is it too redundant now?"*
+
+It is redundant — the card **is** the text now, so a copy beneath it would be the same words twice and a screen reader would read every prompt through and then read it again. Restoring it would undo what the re-set was for.
+
+**But the instinct was right, and it was not nostalgia.** Measuring what was actually lost: the prompt as prose beneath the card ran about **58 characters a line**, left-aligned, at 1.65 leading in `--ink` at 12.58:1. Inside the two-panel card it ran **27**, centred, at 1.5, in `--card-ink` at 6:1. The comfortable measure is 45 to 75 characters. 27 is less than half the lower bound. The prompt had not simply moved; it had been squeezed into a column half the width with tighter leading.
+
+The leading went straight back to 1.65 — a short measure needs *more* leading, not less, because the eye has to find the start of the next line more often.
+
+The measure needed the card to be wider than the 680px prose column, which caps it at 624px however large the screen is. So above 1000px the card steps outside the column to 960px, re-centred with a percentage margin — `(100% - width) / 2` is exactly the negative offset that centres a child wider than its parent, with no transform and no positioning, and it survives the column ever changing width. The split moves to 1.25/1 at the same time: Helen's 50.6/49.4 is right for a printed card, where the words are set to fit the panel, and backwards on screen, where the words are given and the panel has to fit them.
+
+**The stacking breakpoint moved from 560px to 1000px, and that is the part worth remembering.** It is not about phones. Two panels only reach a readable measure once the card is about 960px wide, which needs roughly a 1000px viewport; below that, measured, stacking beats it every time — 35 characters at an 800px viewport against 58 stacked. So the rule is to use two panels only where two panels actually read, and stack otherwise, including on a tablet that looks wide enough for a card.
+
+Measured after: 58 characters stacked, 46 in two panels, 27 nowhere.
+
 ### The card follows the theme, and the pebbles are vector
 
 Ryan's call, 2026-09-15, immediately after the re-set landed: *"Go theme-aware with the SVG pebbles."*
