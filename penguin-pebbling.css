@@ -181,7 +181,15 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { -webkit-text-size-adjust: 100%; }
+/* The topbar is sticky and about 69px tall, so an anchor jump or a control
+ * scrolled into view lands underneath it unless the scroll stops short. That is
+ * WCAG 2.2 Focus Not Obscured, and it bites the two things this site most wants
+ * to work: the skip link, and /about#licence — the URL the JSON-LD hands anyone
+ * asking how this game is licensed.
+ *
+ * In rem, not px, because the bar is set in rem too: at a larger browser default
+ * both grow together, which a fixed 80px would not. */
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: 5rem; }
 
 body {
   font-family: var(--font);
@@ -570,6 +578,10 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 .sitefoot a { color: var(--accent); }
 .sitefoot p + p { margin-top: 0.7rem; }
 .footlinks { margin-top: 1rem; }
+/* 24x24 is the WCAG 2.2 minimum. Inline links inside a sentence are exempt —
+ * their size is set by the prose around them — but this one sits alone in its
+ * own paragraph, so nothing exempts it and the line-height alone left it 20px. */
+.footlinks a { display: inline-block; padding-block: 0.25rem; }
 
 .refs { font-size: var(--text-sm); color: var(--ink-soft); line-height: 1.7; }
 .refs p { margin-bottom: 0.7rem; padding-left: 1.5rem; text-indent: -1.5rem; }
@@ -609,6 +621,27 @@ hr.rule { border: 0; height: 1px; background: var(--line); margin: 2.2rem 0; }
 
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+/* Windows High Contrast and other forced-colour modes replace every colour the
+ * page chose. Most of this site survives that intact, and not by luck: the
+ * low-stimulation palette does its work with 1px borders rather than fills, so
+ * every button, the card mat and the menu keep a real edge once their fills are
+ * overridden. The rule is to repair what loses *meaning*, not to reinstate a
+ * look the reader has deliberately turned off.
+ *
+ * One thing loses meaning. A locution filter says it is active through
+ * background, border-colour and text colour — all three forced to the same
+ * values as every other button — leaving font-weight as the only surviving cue
+ * that you are filtered to six cards instead of thirty. System colours are
+ * honoured here, so the pressed state is drawn with the pair the OS reserves for
+ * exactly this. */
+@media (forced-colors: active) {
+  .fbtn.on {
+    background: Highlight;
+    color: HighlightText;
+    border-color: Highlight;
+  }
 }
 
 @media print {

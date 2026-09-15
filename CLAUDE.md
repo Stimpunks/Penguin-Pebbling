@@ -105,7 +105,7 @@ No npm, no bundler, no framework, no CDN, no analytics, nothing fetched from a t
 
 The audience is Autistic and otherwise neurodivergent people, many using screen readers, zoom, reading fonts, AAC, or translation. Anything that makes the page harder to operate is a defect in the game, not a cosmetic issue.
 
-Already in place and worth not regressing: full prompt text in every `alt` (not a prefix), a skip link, real `<button>`s with `aria-pressed`, `aria-live` on the card area, visible focus rings, `prefers-reduced-motion`, `width`/`height` on every image, a type scale in `rem` so the reader's own browser text size is honoured, and a dark mode that follows the system in CSS alone so it works with JavaScript off.
+Already in place and worth not regressing: full prompt text in every `alt` (not a prefix), a skip link, real `<button>`s with `aria-pressed`, `aria-live` on the card area, visible focus rings, `prefers-reduced-motion`, a `forced-colors` block that repairs the one state Windows High Contrast flattens (the active locution filter), `scroll-padding-top` so a sticky bar never covers what an anchor jumped to, `width`/`height` on every image, a type scale in `rem` so the reader's own browser text size is honoured, and a dark mode that follows the system in CSS alone so it works with JavaScript off.
 
 **The prompts are lettered into the card artwork.** That is the standing accessibility problem here and the reason the text is also rendered beneath. Do not "simplify" by removing it without reading `DECISIONS.md` first.
 
