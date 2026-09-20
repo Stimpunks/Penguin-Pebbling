@@ -30,7 +30,7 @@ The one time that was stretched is worth knowing about. Rendering the card promp
 | File | Generated from | By |
 |---|---|---|
 | `cards/` (5 locution WebP) | `cards/print/*-locution.png` | `tools/make-images.py` |
-| `changelog.html` | `CHANGELOG.md` | `tools/build-changelog.py` |
+| `changelog.html` and `feed.xml` | `CHANGELOG.md` | `tools/build-changelog.py` |
 | `search-index.json` | `penguin-pebbling.js` | `tools/make-search-index.py` |
 | `llms.txt` | the pages' own title/description/canonical, and the deck | `tools/make-llms-txt.py` |
 | `og-image.png` | the deck, the card palette, `favicon.svg`, `cards/art/`, the woff2 | `tools/make-og-image.py` |
@@ -61,7 +61,7 @@ Eleven, all Python, all run by hand, none wired into a build. Eight take `--chec
 |---|---|---|
 | `tools/sync-shell.py` | stamps the nav and footer into every page | yes |
 | `tools/check-contrast.py` | every colour pair, both themes, against WCAG AA | it only ever checks |
-| `tools/build-changelog.py` | renders `CHANGELOG.md` into `changelog.html` | yes |
+| `tools/build-changelog.py` | renders `CHANGELOG.md` into `changelog.html` and `feed.xml` | yes |
 | `tools/make-search-index.py` | publishes the deck's text at `/search-index.json` | yes |
 | `tools/set-domain.py` | rewrites the site's own address everywhere at once | yes |
 | `tools/make-llms-txt.py` | regenerates `llms.txt`, the curated index for language models | yes |
@@ -74,6 +74,10 @@ Eleven, all Python, all run by hand, none wired into a build. Eight take `--chec
 `make-images.py`, `make-og-image.py`, `make-icons.py` and `make-card-art.py` need Pillow, and `make-og-image.py` also needs fontTools and brotli — it renders the page's own woff2, which Pillow cannot read; if it is missing they say so and name the `pip` line. **A tool that could not run has not run** — do not report a check as passing because it printed an error.
 
 `build-changelog.py` understands a deliberately small Markdown dialect and treats anything else as a **hard error rather than a silent drop**. That is on purpose: a changelog that quietly loses an entry still looks fine.
+
+It renders `changelog.html` and `feed.xml` from that one parser, which is why the feed does not have a tool of its own — two parsers over one document is how a feed quietly ends up missing a sentence the page has. It also now insists every `## ` heading is a real `YYYY-MM-DD` date, that no two entries share one, and that the file stays newest-first. A duplicate date is the interesting one: the two entries would share an anchor *and* an RSS guid, and a reader dedupes on the guid, so the second would never appear.
+
+**`feed.xml` is not a page.** It is deliberately absent from `sitemap.xml` and from the Menu — and the sitemap is where it would do damage, because `make-service-worker.py` derives its page list from there and would precache `/feed.xml.html`.
 
 ## Verifying a change
 

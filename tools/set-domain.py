@@ -2,12 +2,13 @@
 """Point the site at an origin, everywhere at once.
 
 The site's own address is written into every page's canonical link, og:url and
-og:image, plus the JSON-LD `url` and `license` on index.html, the Sitemap line in
-robots.txt, and one <loc> per page in sitemap.xml. That is dozens of places
-across ten files, and it grows every time a page is added. There is no build step to
-derive them from one constant, so without this they get changed by hand and one
-gets missed — and the one that gets missed is usually the canonical, which is the
-single worst one to point at a domain that does not resolve.
+og:image, plus the JSON-LD `url` and `license` on index.html, the Sitemap line
+in robots.txt, one <loc> per page in sitemap.xml, and every link in the
+changelog feed. That is dozens of places across twelve files, and it grows every
+time a page is added. There is no build step to derive them from one constant,
+so without this they get changed by hand and one gets missed — and the one that
+gets missed is usually the canonical, which is the single worst one to point at
+a domain that does not resolve.
 
     python3 tools/set-domain.py --check
     python3 tools/set-domain.py https://penguinpebbling.app
@@ -25,9 +26,14 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
+# CHANGELOG.md is in this list alongside the two files generated from it. Its
+# prose carries absolute links to this site's own pages, so rewriting only
+# changelog.html and feed.xml would be undone by the next run of
+# tools/build-changelog.py — the old origin would come straight back out of the
+# source. That was already true of changelog.html before the feed existed.
 FILES = ["index.html", "how-to-play.html", "locutions.html", "print.html",
          "about.html", "changelog.html", "privacy.html", "robots.txt",
-         "sitemap.xml", "llms.txt"]
+         "sitemap.xml", "llms.txt", "feed.xml", "CHANGELOG.md"]
 
 # Every origin this site has ever been addressed by. A new one is added here the
 # first time it is used, so the rewrite can always find what it is replacing.

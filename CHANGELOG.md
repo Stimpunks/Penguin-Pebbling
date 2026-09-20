@@ -4,6 +4,12 @@ Notable changes to Penguin Pebbling — both the **game** (the cards, the prompt
 
 Each dated entry is split into **Game** and **Site**. An entry only carries the sections that changed.
 
+## 2026-09-20
+
+### Site
+
+- **The changelog has a feed, so you can follow it without coming back to look.** Hand [the feed](https://penguinpebbling.app/feed.xml) to any feed reader and each dated entry turns up there as it is written — the whole entry, not a line of it with a link. There is no sign-up and no list: a reader asks this site for a file the same way a browser asks for a page, so nobody here knows who is subscribed, and there is nothing new to say on the [privacy](https://penguinpebbling.app/privacy) page. The feed is built from this file by the same tool that builds this page, so it cannot end up saying something the page does not.
+
 ## 2026-09-15
 
 ### Site

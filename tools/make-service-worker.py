@@ -24,6 +24,9 @@ one. There is no partial upgrade to reason about.
 - `og-image.png` — 311 KB that only ever unfurls a link. Useless offline.
 - `cards/*-[1-6].webp` — the prompt-card derivatives the re-set left behind.
   Nothing references them.
+- `feed.xml` — read by a feed reader, which is a different program on a
+  different schedule and never passes through this worker. Nobody browsing
+  offline needs the changelog in RSS when the changelog page itself is held.
 
 ## The strategy, and why it is not the usual one
 

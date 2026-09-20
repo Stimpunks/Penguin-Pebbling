@@ -407,6 +407,13 @@ body {
   margin-top: 1rem;
 }
 
+/* The subscribe link under the changelog's standfirst. It stands alone in its
+ * own paragraph, so the WCAG 2.2 target-size note on .footlinks applies here
+ * too. No new colour: --accent is a pair tools/check-contrast.py already
+ * measures in both themes. */
+.feedlink { font-size: var(--text-sm); margin-top: 0.9rem; }
+.feedlink a { color: var(--accent); display: inline-block; padding-block: 0.25rem; }
+
 .prose h2 {
   font-size: var(--text-xl);
   font-weight: 700;

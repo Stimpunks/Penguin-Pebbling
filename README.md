@@ -43,6 +43,7 @@ favicon.ico             generated — the fallback for anything that wants an .i
 icon-maskable.png       generated — the Android home-screen icon, safe-zone padded
 search-index.json       generated from penguin-pebbling.js — the deck's text, for our mirror
 llms.txt                generated from the pages — a short map of the site for LLMs
+feed.xml                generated from CHANGELOG.md — the changelog as RSS
 tools/make-images.py    regenerates cards/ from cards/print/
 tools/make-og-image.py  redraws og-image.png as one of the re-set cards
 tools/make-icons.py     regenerates favicon.ico and icon-maskable.png
@@ -50,7 +51,7 @@ tools/make-card-art.py  cuts cards/art/ out of the print masters
 tools/make-service-worker.py  regenerates sw.js, the offline precache
 tools/set-domain.py     rewrites the site's own address everywhere at once
 tools/sync-shell.py     keeps the nav and footer identical across the pages
-tools/build-changelog.py renders CHANGELOG.md into changelog.html
+tools/build-changelog.py renders CHANGELOG.md into changelog.html and feed.xml
 tools/make-search-index.py publishes the deck's text for archivers and our mirror
 tools/check-contrast.py checks every colour pair, both themes, against WCAG AA
 tools/make-llms-txt.py  regenerates llms.txt, the curated index for language models
@@ -120,11 +121,12 @@ python3 tools/sync-shell.py --check  # report drift, write nothing
 ## The changelog
 
 `CHANGELOG.md` is the source; the published page at
-[penguinpebbling.app/changelog](https://penguinpebbling.app/changelog) is generated from it.
-**Never edit `changelog.html` by hand** — the next build overwrites it.
+[penguinpebbling.app/changelog](https://penguinpebbling.app/changelog) and the RSS feed at
+[penguinpebbling.app/feed.xml](https://penguinpebbling.app/feed.xml) are both generated from it.
+**Never edit `changelog.html` or `feed.xml` by hand** — the next build overwrites them.
 
 ```bash
-python3 tools/build-changelog.py          # rebuild the page
+python3 tools/build-changelog.py          # rebuild the page and the feed
 python3 tools/build-changelog.py --check  # report drift, write nothing
 ```
 
@@ -137,6 +139,14 @@ inline bold, italic, code and links — and **anything else is a hard error rath
 drop.** A renderer that quietly swallows a line it does not recognise is the worst kind for a
 document whose whole job is being a complete record: the page would look fine and the entry
 would be gone.
+
+The feed is one item per dated entry, rendered by that same function — a second parser over one
+document is how a feed ends up missing a sentence the page has. Three rules keep it checkable and
+correct: every `##` heading must be a real `YYYY-MM-DD` date, no two entries may share one (they
+would share an anchor and an RSS guid, and a reader would never show the second), and the file
+must stay newest-first. Nothing in the feed varies between runs over an unchanged source, so
+`--check` means something; `feed.xml` is not a page, so it belongs in neither `sitemap.xml` nor
+the nav.
 
 ## Colour
 
